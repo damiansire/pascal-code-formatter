@@ -1,5 +1,5 @@
 import { PascalToken, TokenType } from "pascal-tokenizer";
-
+import { tokenizePascal } from "pascal-tokenizer";
 const isComment = (token: PascalToken): boolean => {
   return ["COMMENT_STAR", "COMMENT_BLOCK_BRACE", "COMMENT_LINE"].includes(token.type);
 };
@@ -23,7 +23,8 @@ export interface FormattedPascalLine {
   indentation: number;
 }
 
-export function formatPascalCode(tokenizeCode: PascalToken[]): FormattedPascalLine[] {
+export function formatPascalCode(code: string): FormattedPascalLine[] {
+  const tokenizeCode: PascalToken[] = tokenizePascal(code);
   const lines: FormattedPascalLine[] = [];
   let currentLine: FormattedPascalLine = { tokens: [], indentation: 0 };
   let newLine = false;
