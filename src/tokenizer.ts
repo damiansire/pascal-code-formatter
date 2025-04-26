@@ -78,6 +78,12 @@ export function tokenizePascal(code: string, skipComments: boolean = true) {
                 console.error("Error: Unclosed '(*' comment.");
                 currentIndex = code.length;
             } else {
+                if (!skipComments) {
+                    const comment = code.substring(currentIndex - 2, commentEnd + 2)
+                    tokens.push({
+                        type: 'COMMENT_STAR', value: comment
+                    });
+                }
                 currentIndex = commentEnd + 2;
             }
             continue;
