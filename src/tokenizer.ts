@@ -1,4 +1,4 @@
-export function tokenizePascal(code: string) {
+export function tokenizePascal(code: string, skipComments: boolean = true) {
     const tokens: Array<{ type: string; value: any }> = [];
     let currentIndex = 0;
 
