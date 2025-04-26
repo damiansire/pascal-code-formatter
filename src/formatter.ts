@@ -38,7 +38,7 @@ export interface FormatPascalCodeOptions {
 
 const isWhitespaceRequired = (currentToken: PascalToken, nextToken: PascalToken): boolean => {
   if (currentToken.type === "KEYWORD") {
-    if (currentToken.value === "program") {
+    if (["program", "uses"].includes(currentToken.value)) {
       return true;
     }
   }
