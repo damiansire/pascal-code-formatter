@@ -18,10 +18,16 @@ const isNewLine = (token: PascalToken, nextToken: PascalToken): boolean => {
   return false;
 };
 
-export function formatPascalCode(tokenizeCode: PascalToken[]): PascalToken[][] {
-  const lines: PascalToken[][] = [];
-  let currentLine: PascalToken[] = [];
+interface FormattedPascalLine {
+  tokens: PascalToken[];
+  indentation: number;
+}
+
+export function formatPascalCode(tokenizeCode: PascalToken[]): FormattedPascalLine[] {
+  const lines: FormattedPascalLine[] = [];
+  let currentLine: FormattedPascalLine = { tokens: [], indentation: 0 };
   let newLine = false;
+  let indentation = 0;
 
   for (let index = 0; index < tokenizeCode.length; index++) {
     const token = tokenizeCode[index];
@@ -31,10 +37,10 @@ export function formatPascalCode(tokenizeCode: PascalToken[]): PascalToken[][] {
       newLine = true;
     }
 
-    currentLine.push(token);
+    currentLine.tokens.push(token);
     if (newLine) {
       lines.push(currentLine);
-      currentLine = [];
+      currentLine = { tokens: [], indentation: 0 };
       newLine = false;
     }
   }
