@@ -18,7 +18,7 @@ const isNewLine = (token: PascalToken, nextToken: PascalToken): boolean => {
   return false;
 };
 
-interface FormattedPascalLine {
+export interface FormattedPascalLine {
   tokens: PascalToken[];
   indentation: number;
 }
