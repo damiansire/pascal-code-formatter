@@ -90,11 +90,18 @@ export function tokenizePascal(code: string, skipComments: boolean = true) {
         }
         // Comment type // ... until end of line (Common in Delphi/FPC)
         if (char === '/' && nextChar === '/') {
+            const initialIndex = currentIndex;
             currentIndex += 2;
             while (currentIndex < code.length && code[currentIndex] !== '\n') {
                 currentIndex++;
             }
             // currentIndex is now at \n or end of code
+            if (!skipComments) {
+                const comment = code.substring(initialIndex, currentIndex - 1)
+                tokens.push({
+                    type: 'COMMENT_LINE', value: comment
+                });
+            }
             continue;
         }
 
