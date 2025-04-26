@@ -18,13 +18,13 @@ import { tokenizePascal } from "./tokenizer";
 const pascalCode = `
 program HelloWorld;
 var
-  message: string;
+  message: string; { hola solo estoy provando que tal funciona esto xd }
 begin
-  message := 'Hello, World!';
-  writeln(message);
+  message := 'Hello, World!';  (* Muestra un mensaje en pantalla *)
+  writeln(message); //esto se lee??
 end.
 `;
 
 
-const tokenizeCode = tokenizePascal(pascalCode)
+const tokenizeCode = tokenizePascal(pascalCode, false)
 console.log(tokenizeCode)

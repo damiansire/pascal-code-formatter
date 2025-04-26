@@ -31,7 +31,7 @@ export function tokenizePascal(code: string, skipComments: boolean = true) {
         '>': 'OPERATOR_GREATER',// Could be part of >=
         ':': 'DELIMITER_COLON', // Could be part of :=
         '^': 'OPERATOR_POINTER',
-        '@': 'OPERATOR_ADDRESSOF'
+        '@': 'OPERATOR_ADDRESSOF',
     };
 
     // Useful regular expressions
@@ -59,6 +59,13 @@ export function tokenizePascal(code: string, skipComments: boolean = true) {
                 console.error("Error: Unclosed '{' comment.");
                 currentIndex = code.length;
             } else {
+                if (!skipComments) {
+                    const comment = code.substring(currentIndex - 1, commentEnd + 1)
+                    tokens.push({
+                        type: 'COMMENT_BLOCK_BRACE', value: comment
+                    });
+
+                }
                 currentIndex = commentEnd + 1;
             }
             continue;
