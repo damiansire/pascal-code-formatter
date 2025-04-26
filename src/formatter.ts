@@ -48,6 +48,15 @@ const isWhitespaceRequired = (currentToken: PascalToken, nextToken: PascalToken)
   return false;
 };
 
+const needEmptyLine = (line: FormattedPascalLine): boolean => {
+  const triggerKeywords = ["program", "uses", "begin"];
+
+  const foundKeyword = line.tokens.some(
+    (token) => token.type === "KEYWORD" && triggerKeywords.includes(token.value.toLowerCase())
+  );
+
+  return foundKeyword;
+};
 export function formatPascalCode(code: string, options: FormatPascalCodeOptions = {}): FormattedPascalLine[] {
   const { ignoreEOF = true, addEmptyFinalLine = false } = options;
 
@@ -71,6 +80,9 @@ export function formatPascalCode(code: string, options: FormatPascalCodeOptions 
 
     if (isNewLine(token, nextToken)) {
       lines.push(currentLine);
+      if (needEmptyLine(currentLine)) {
+        lines.push({ tokens: [], indentation: 0 });
+      }
       currentLine = { tokens: [], indentation: 0 };
     }
   }
