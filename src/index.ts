@@ -1,4 +1,5 @@
 import { tokenizePascal, PascalToken, TokenType } from "pascal-tokenizer";
+import { formatPascalCode } from "./formatter";
 /*import { PascalFormatter } from './formatter';
 // Create formatter instance
 const formatter = new PascalFormatter();
@@ -25,4 +26,6 @@ end.
 `;
 
 const tokenizeCode = tokenizePascal(pascalCode, false);
-console.log(tokenizeCode);
+const formatCode = formatPascalCode(tokenizeCode);
+
+console.log(formatCode);
