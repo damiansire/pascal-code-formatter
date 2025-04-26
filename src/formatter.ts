@@ -1,4 +1,4 @@
-export class PascalFormatter {
+/*export class PascalFormatter {
     private indentSize: number = 2;
     private currentIndent: number = 0;
 
@@ -12,6 +12,4 @@ export class PascalFormatter {
         }
     }
 }
-
-
-
+*/
