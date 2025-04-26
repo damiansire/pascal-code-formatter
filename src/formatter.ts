@@ -1,18 +1,26 @@
 import { PascalToken, TokenType } from "pascal-tokenizer";
 import { tokenizePascal } from "pascal-tokenizer";
+
 const isComment = (token: PascalToken): boolean => {
   return ["COMMENT_STAR", "COMMENT_BLOCK_BRACE", "COMMENT_LINE"].includes(token.type);
 };
 
-const isBreakLineKeyword = (token: PascalToken): boolean => {
+const isBreakLineKeyword = (token: PascalToken, nextToken: PascalToken | null): boolean => {
+  if (token.type === "KEYWORD" && token.value === "end" && nextToken?.type === "DELIMITER_DOT") {
+    return false;
+  }
   return token.type === "KEYWORD" && ["begin", "end", "var"].includes(token.value);
 };
 
-const isNewLine = (token: PascalToken, nextToken: PascalToken): boolean => {
-  if (nextToken === null || isComment(nextToken)) {
-    return false;
+const isNewLine = (token: PascalToken, nextToken: PascalToken | null): boolean => {
+  if (nextToken === null) {
+    return isComment(token) || token.type === "DELIMITER_SEMICOLON";
   }
-  if (token.type === "DELIMITER_SEMICOLON" || isComment(token) || isBreakLineKeyword(token)) {
+
+  if (isComment(nextToken)) {
+    return true;
+  }
+  if (token.type === "DELIMITER_SEMICOLON" || isComment(token) || isBreakLineKeyword(token, nextToken)) {
     return true;
   }
   return false;
@@ -23,27 +31,36 @@ export interface FormattedPascalLine {
   indentation: number;
 }
 
-export function formatPascalCode(code: string): FormattedPascalLine[] {
+export interface FormatPascalCodeOptions {
+  ignoreEOF?: boolean;
+  addEmptyFinalLine?: boolean;
+}
+
+export function formatPascalCode(code: string, options: FormatPascalCodeOptions = {}): FormattedPascalLine[] {
+  const { ignoreEOF = true, addEmptyFinalLine = false } = options;
+
   const tokenizeCode: PascalToken[] = tokenizePascal(code);
   const lines: FormattedPascalLine[] = [];
   let currentLine: FormattedPascalLine = { tokens: [], indentation: 0 };
-  let newLine = false;
-  let indentation = 0;
 
   for (let index = 0; index < tokenizeCode.length; index++) {
     const token = tokenizeCode[index];
     const nextToken = tokenizeCode[index + 1] || null;
 
-    if (isNewLine(token, nextToken)) {
-      newLine = true;
+    if (token.type === "EOF" && ignoreEOF) {
+      continue;
     }
 
     currentLine.tokens.push(token);
-    if (newLine) {
+
+    if (isNewLine(token, nextToken)) {
       lines.push(currentLine);
       currentLine = { tokens: [], indentation: 0 };
-      newLine = false;
     }
+  }
+
+  if (currentLine.tokens.length > 0) {
+    lines.push(currentLine);
   }
 
   return lines;

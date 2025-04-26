@@ -1,44 +1,78 @@
-//import { PascalFormatter } from '../formatter';
+import { formatPascalCode, FormattedPascalLine } from "../index";
+import { PascalToken, TokenType } from "pascal-tokenizer";
 
-describe('PascalFormatter', () => {
-  //let formatter: PascalFormatter;
-
-  beforeEach(() => {
-    //formatter = new PascalFormatter();
+describe("formatPascalCode", () => {
+  test("should return an empty array for empty input", () => {
+    const input = "";
+    const expected: FormattedPascalLine[] = [];
+    expect(formatPascalCode(input)).toEqual(expected);
   });
 
-  test('should format a simple program', () => {
-    const input = `program HelloWorld;`;
-    const expected = `program HelloWorld;`;
-    //expect(formatter.format(input)).toBe(expected);
+  test("should return correct result for only named program", () => {
+    const input = "program Test;";
+    const expected: FormattedPascalLine[] = [
+      {
+        tokens: [
+          { type: "KEYWORD", value: "program" },
+          { type: "IDENTIFIER", value: "Test" },
+          { type: "DELIMITER_SEMICOLON", value: ";" },
+        ],
+        indentation: 0,
+      },
+    ];
+    expect(formatPascalCode(input)).toEqual(expected);
+  });
+
+  test("can handle final end.", () => {
+    const input = "end.";
+
+    const expected: FormattedPascalLine[] = [
+      {
+        tokens: [
+          { type: "KEYWORD", value: "end" },
+          { type: "DELIMITER_DOT", value: "." },
+        ],
+        indentation: 0,
+      },
+    ];
+    expect(formatPascalCode(input)).toEqual(expected);
   });
 
   /*
-    test('should format a simple begin-end program', () => {
-      const input = `program HelloWorld; begin end.`;
-      const expected = `program HelloWorld;
-    begin
-    end.`;
-      expect(formatter.format(input)).toBe(expected);
-    });
-  
-    test('should format a simple minimized program', () => {
-      const input = `program NotAsStupid;const a=5;var alpha,beta:real;begin alpha:=a+b;beta:=b/a;end.`;
-      const expected = `program NotAsStupid;
-  
-  const
-    a = 5;
-  
-  var
-    alpha, beta: real;
-  
-  begin
-    alpha := a + b;  // Nota: 'b' no está declarada/definida
-    beta := b / a;   // Nota: 'b' no está declarada/definida
-  end.`;
-      expect(formatter.format(input)).toBe(expected);
-    });
-  
-  
+  test("should return correct result for simple program", () => {
+    const input = "program Test; begin var x: integer; end.";
+    const expected: FormattedPascalLine[] = [
+      {
+        tokens: [
+          { type: "KEYWORD", value: "program" },
+          { type: "IDENTIFIER", value: "Test" },
+          { type: "DELIMITER_SEMICOLON", value: ";" },
+        ],
+        indentation: 0,
+      },
+      {
+        tokens: [{ type: "KEYWORD", value: "begin" }],
+        indentation: 0,
+      },
+      {
+        tokens: [
+          { type: "KEYWORD", value: "var" },
+          { type: "IDENTIFIER", value: "x" },
+          { type: "DELIMITER_COLON", value: ":" },
+          { type: "IDENTIFIER", value: "integer" },
+          { type: "DELIMITER_SEMICOLON", value: ";" },
+        ],
+        indentation: 0,
+      },
+      {
+        tokens: [
+          { type: "KEYWORD", value: "end" },
+          { type: "DELIMITER_DOT", value: "." },
+        ],
+        indentation: 0,
+      },
+    ];
+    expect(formatPascalCode(input)).toEqual(expected);
+  });
   */
-}); 
+});
