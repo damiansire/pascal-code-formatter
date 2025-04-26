@@ -31,7 +31,7 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
-    "pascal-tokenizer": "^0.0.1"
+    "pascal-tokenizer": "^0.0.3"
   },
   "directories": {
     "doc": "docs",
