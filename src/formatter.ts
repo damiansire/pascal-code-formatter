@@ -42,6 +42,9 @@ const isWhitespaceRequired = (currentToken: PascalToken, nextToken: PascalToken)
       return true;
     }
   }
+  if (currentToken.type === "DELIMITER_COLON" && nextToken.type === "KEYWORD") {
+    return true;
+  }
   return false;
 };
 
