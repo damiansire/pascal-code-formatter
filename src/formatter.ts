@@ -63,5 +63,9 @@ export function formatPascalCode(code: string, options: FormatPascalCodeOptions 
     lines.push(currentLine);
   }
 
+  if (addEmptyFinalLine && lines.length > 0 && lines[lines.length - 1].tokens.length > 0) {
+    lines.push({ tokens: [], indentation: 0 });
+  }
+
   return lines;
 }
