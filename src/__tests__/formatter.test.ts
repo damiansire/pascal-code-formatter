@@ -14,6 +14,7 @@ describe("formatPascalCode", () => {
       {
         tokens: [
           { type: "KEYWORD", value: "program" },
+          { type: "WHITESPACE", value: " " },
           { type: "IDENTIFIER", value: "Test" },
           { type: "DELIMITER_SEMICOLON", value: ";" },
         ],

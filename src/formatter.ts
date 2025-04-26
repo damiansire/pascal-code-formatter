@@ -36,6 +36,15 @@ export interface FormatPascalCodeOptions {
   addEmptyFinalLine?: boolean;
 }
 
+const isWhitespaceRequired = (currentToken: PascalToken, nextToken: PascalToken): boolean => {
+  if (currentToken.type === "KEYWORD") {
+    if (currentToken.value === "program") {
+      return true;
+    }
+  }
+  return false;
+};
+
 export function formatPascalCode(code: string, options: FormatPascalCodeOptions = {}): FormattedPascalLine[] {
   const { ignoreEOF = true, addEmptyFinalLine = false } = options;
 
@@ -52,6 +61,10 @@ export function formatPascalCode(code: string, options: FormatPascalCodeOptions 
     }
 
     currentLine.tokens.push(token);
+
+    if (isWhitespaceRequired(token, nextToken)) {
+      currentLine.tokens.push({ type: "WHITESPACE", value: " " });
+    }
 
     if (isNewLine(token, nextToken)) {
       lines.push(currentLine);
