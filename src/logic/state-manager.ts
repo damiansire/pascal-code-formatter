@@ -9,6 +9,9 @@ class StateManager {
     let needWhiteSpace = false;
     //End of line evaluator
     if (!isComment(nextToken)) {
+      if (isComment(currentToken)) {
+        isEndOfLine = true;
+      }
       if (currentToken.type === "DELIMITER_SEMICOLON") {
         isEndOfLine = true;
       }
@@ -29,6 +32,9 @@ class StateManager {
       }
     }
     if (currentToken.type === "DELIMITER_COLON" && nextToken.type !== "OPERATOR_EQUAL") {
+      needWhiteSpace = true;
+    }
+    if (isComment(nextToken)) {
       needWhiteSpace = true;
     }
 
