@@ -9,3 +9,14 @@ export interface FormatPascalCodeOptions {
   ignoreEOF?: boolean;
   addEmptyFinalLine?: boolean;
 }
+
+export enum ProgramStructureState {
+  ProgramNameDeclaration = "PROGRAM_NAME_DECLARATION",
+  ConstDeclaration = "CONST_DECLARATION",
+  TypeDeclaration = "TYPE_DECLARATION",
+  VarDeclaration = "VAR_DECLARATION",
+  ProcedureDefinition = "PROCEDURE_DEFINITION",
+  FunctionDefinition = "FUNCTION_DEFINITION",
+  BeginBlock = "BEGIN_BLOCK",
+  EndBlock = "END_BLOCK",
+}

@@ -1,13 +1,12 @@
 import { PascalToken } from "pascal-tokenizer";
-import { FormatPascalCodeOptions, FormattedPascalLine } from "../shared/types";
+import { FormattedPascalLine } from "../shared/types";
 
 class FormatterController {
   private currentIndentationLevel: number;
   private currentLineTokens: PascalToken[];
   private formattedLines: FormattedPascalLine[];
 
-  constructor(code: string, options: FormatPascalCodeOptions) {
-    const { ignoreEOF = true, addEmptyFinalLine = false } = options;
+  constructor(code: string) {
     this.currentIndentationLevel = 0;
     this.currentLineTokens = [];
     this.formattedLines = [];

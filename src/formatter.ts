@@ -1,13 +1,9 @@
-import { PascalToken, TokenType } from "pascal-tokenizer";
-import { tokenizePascal } from "pascal-tokenizer";
 import { FormatPascalCodeOptions, FormattedPascalLine } from "./shared/types";
-import { EmptyLine } from "./shared/elements";
+import { PascalFormatter } from "./logic/pascal-formatter";
 
 const formatPascalCode = (code: string, options: FormatPascalCodeOptions = {}): FormattedPascalLine[] => {
-  const { ignoreEOF = true, addEmptyFinalLine = false } = options;
-  const tokens = tokenizePascal(code);
-
-  return [];
+  const pascalFormatter = new PascalFormatter(code, options);
+  return pascalFormatter.format();
 };
 
 export { formatPascalCode };
