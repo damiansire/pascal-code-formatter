@@ -24,9 +24,14 @@ class IdentationManager {
     this.indentationStack = new CounterweightStack<PascalToken>(rules);
   }
   evaluateLineIndentation(tokens: PascalToken[]) {
-    const currentIndent = this.indentationStack.size();
+    let currentIndent = this.indentationStack.size();
     for (const token of tokens) {
-      this.indentationStack.pop(token);
+      const result = this.indentationStack.pop(token);
+      if (result?.type === "KEYWORD") {
+        if (result?.value === "var") {
+          currentIndent = 0;
+        }
+      }
     }
     for (const token of tokens) {
       if (deepEqual(token, varToken)) {
