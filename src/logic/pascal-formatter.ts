@@ -43,7 +43,7 @@ class PascalFormatter {
     if (state.needWhiteSpace) {
       this.formatterController.addWhiteSpace();
     }
-    if (state.isEndOfLine || nextToken === undefined) {
+    if (state.isEndOfLine) {
       this.formatterController.finalizeLine();
     }
     if (this.structureManager.needAddEmptyLine()) {

@@ -17,6 +17,9 @@ class StateManager {
           isEndOfLine = true;
         }
       }
+      if (nextToken === undefined) {
+        isEndOfLine = true;
+      }
     }
 
     //whitespace evaluator
