@@ -29,7 +29,11 @@ class PascalFormatter {
     let formattedLines = this.formatterController.getFormattedLines();
     if (this.options.ignoreEOF) {
       if (formattedLines.at(-1)?.tokens.at(-1)?.type === "EOF") {
-        formattedLines[formattedLines.length - 1].tokens.pop();
+        if (formattedLines[formattedLines.length - 1]?.tokens?.length > 1) {
+          formattedLines[formattedLines.length - 1].tokens.pop();
+        } else {
+          formattedLines.pop();
+        }
       }
     }
     return this.formatterController.getFormattedLines();
