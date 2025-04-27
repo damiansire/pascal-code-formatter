@@ -7,6 +7,7 @@ class StateManager {
   evaluateState(currentToken: PascalToken, nextToken: PascalToken) {
     let isEndOfLine = false;
     let needWhiteSpace = false;
+    //End of line evaluator
     if (!isComment(nextToken)) {
       if (currentToken.type === "DELIMITER_SEMICOLON") {
         isEndOfLine = true;
@@ -17,10 +18,15 @@ class StateManager {
         }
       }
     }
+
+    //whitespace evaluator
     if (currentToken.type === "KEYWORD") {
       if (currentToken.value === "program") {
         needWhiteSpace = true;
       }
+    }
+    if (currentToken.type === "DELIMITER_COLON" && nextToken.type !== "OPERATOR_EQUAL") {
+      needWhiteSpace = true;
     }
 
     return { isEndOfLine, needWhiteSpace };
