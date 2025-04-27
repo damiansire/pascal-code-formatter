@@ -1,20 +1,17 @@
 import { PascalToken } from "pascal-tokenizer";
 import { FormattedPascalLine } from "../shared/types";
 import { EmptyLine, WhiteSpace } from "../shared/elements";
+import { IdentationManager } from "./identation-manager";
 
 class FormatterController {
-  private currentIndentationLevel: number;
   private currentLineTokens: PascalToken[];
   private formattedLines: FormattedPascalLine[];
+  private indentationManager: IdentationManager;
 
   constructor() {
-    this.currentIndentationLevel = 0;
     this.currentLineTokens = [];
     this.formattedLines = [];
-  }
-
-  public incrementIndentation(): void {
-    this.currentIndentationLevel++;
+    this.indentationManager = new IdentationManager();
   }
 
   public addTokenToCurrentLine(token: PascalToken): void {
@@ -23,9 +20,10 @@ class FormatterController {
 
   public finalizeLine(): void {
     if (this.currentLineTokens.length > 0) {
+      const deepLine = this.indentationManager.evaluateLineIndentation(this.currentLineTokens);
       this.formattedLines.push({
         tokens: [...this.currentLineTokens],
-        indentation: this.currentIndentationLevel,
+        indentation: deepLine,
       });
       this.currentLineTokens = [];
     }
