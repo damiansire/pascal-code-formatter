@@ -76,7 +76,7 @@ describe("formatPascalCode", () => {
         indentation: 0,
       },
     ];
-    expect(formatPascalCode(input)).toEqual(expected);
+    expect(formatPascalCode(input, { ignoreEOF: true })).toEqual(expected);
   });
 
   /*

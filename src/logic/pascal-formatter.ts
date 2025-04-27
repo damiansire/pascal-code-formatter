@@ -3,6 +3,7 @@ import { FormatPascalCodeOptions } from "../shared/types";
 import { FormatterController } from "./formatter.controller";
 import { StructureManager } from "./structure-manager";
 import { StateManager } from "./state-manager";
+import { throws } from "assert";
 
 class PascalFormatter {
   private tokens: PascalToken[];
@@ -25,6 +26,13 @@ class PascalFormatter {
       const nextToken = this.tokens[index + 1];
       this.processToken(prevToken, currentToken, nextToken);
     }
+
+    let formattedLines = this.formatterController.getFormattedLines();
+    if (this.options.ignoreEOF) {
+      if (formattedLines.at(-1)?.tokens.at(-1)?.type === "EOF") {
+        formattedLines[formattedLines.length - 1].tokens.pop();
+      }
+    }
     return this.formatterController.getFormattedLines();
   }
 
@@ -35,7 +43,7 @@ class PascalFormatter {
     if (state.needWhiteSpace) {
       this.formatterController.addWhiteSpace();
     }
-    if (state.isEndOfLine) {
+    if (state.isEndOfLine || nextToken === undefined) {
       this.formatterController.finalizeLine();
     }
     if (this.structureManager.needAddEmptyLine()) {
