@@ -34,9 +34,12 @@ class IdentationManager {
       }
     }
     for (const token of tokens) {
-      if (deepEqual(token, varToken)) {
+      if (deepEqual(token, varToken) || deepEqual(token, beginToken)) {
         this.indentationStack.push(token);
       }
+    }
+    if (tokens.some((token) => deepEqual(token, endToken))) {
+      currentIndent = this.indentationStack.size();
     }
     return currentIndent;
   }
