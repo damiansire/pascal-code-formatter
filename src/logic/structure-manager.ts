@@ -31,10 +31,8 @@ class StructureManager {
         return ProgramStructureState.ProgramNameDeclaration;
       } else if (token.value === "var") {
         return ProgramStructureState.VarDeclaration;
-      } else if (token.value === "begin") {
-        return ProgramStructureState.BeginBlock;
-      } else if (token.value === "end") {
-        return ProgramStructureState.EndBlock;
+      } else if (token.value === "begin" || token.value === "end") {
+        return ProgramStructureState.CodeDeclaration;
       } else if (token.value === "procedure") {
         return ProgramStructureState.ProcedureDefinition;
       } else if (token.value === "function") {

@@ -3,7 +3,6 @@ import { FormatPascalCodeOptions } from "../shared/types";
 import { FormatterController } from "./formatter.controller";
 import { StructureManager } from "./structure-manager";
 import { StateManager } from "./state-manager";
-import { throws } from "assert";
 
 class PascalFormatter {
   private tokens: PascalToken[];

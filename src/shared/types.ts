@@ -17,8 +17,7 @@ export enum ProgramStructureState {
   VarDeclaration = "VAR_DECLARATION",
   ProcedureDefinition = "PROCEDURE_DEFINITION",
   FunctionDefinition = "FUNCTION_DEFINITION",
-  BeginBlock = "BEGIN_BLOCK",
-  EndBlock = "END_BLOCK",
+  CodeDeclaration = "CODE_DECLARATION",
   Unknown = "UNKNOWN",
   Initial = "INITIAL",
 }
