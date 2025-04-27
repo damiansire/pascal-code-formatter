@@ -55,4 +55,49 @@ describe("formatPascalCode", () => {
     ];
     expect(formatPascalCode(input, { ignoreEOF: true })).toEqual(expected);
   });
+
+  test("should format a simple Hello World program with comments", () => {
+    const input =
+      "program MiPrimerPrograma;begin writeln('Hola, mundo!'); (* Muestra un mensaje en pantalla *) end. (* El punto final es crucial! *)";
+
+    const expected: FormattedPascalLine[] = [
+      {
+        tokens: [
+          { type: "KEYWORD", value: "program" },
+          WhiteSpace,
+          { type: "IDENTIFIER", value: "MiPrimerPrograma" },
+          { type: "DELIMITER_SEMICOLON", value: ";" },
+        ],
+        indentation: 0,
+      },
+      EmptyLine,
+      {
+        tokens: [{ type: "KEYWORD", value: "begin" }],
+        indentation: 0,
+      },
+      {
+        tokens: [
+          { type: "IDENTIFIER", value: "writeln" },
+          { type: "DELIMITER_LPAREN", value: "(" },
+          { type: "STRING_LITERAL", value: "Hola, mundo!" },
+          { type: "DELIMITER_RPAREN", value: ")" },
+          { type: "DELIMITER_SEMICOLON", value: ";" },
+          WhiteSpace,
+          { type: "COMMENT_STAR", value: "(* Muestra un mensaje en pantalla *)" },
+        ],
+        indentation: 1,
+      },
+      {
+        tokens: [
+          { type: "KEYWORD", value: "end" },
+          { type: "DELIMITER_DOT", value: "." },
+          WhiteSpace,
+          { type: "COMMENT_STAR", value: "(* El punto final es crucial! *)" },
+        ],
+        indentation: 0,
+      },
+    ];
+
+    expect(formatPascalCode(input, { ignoreEOF: true })).toEqual(expected);
+  });
 });
