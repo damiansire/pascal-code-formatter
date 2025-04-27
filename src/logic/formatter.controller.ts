@@ -6,7 +6,7 @@ class FormatterController {
   private currentLineTokens: PascalToken[];
   private formattedLines: FormattedPascalLine[];
 
-  constructor(code: string) {
+  constructor() {
     this.currentIndentationLevel = 0;
     this.currentLineTokens = [];
     this.formattedLines = [];

@@ -19,4 +19,6 @@ export enum ProgramStructureState {
   FunctionDefinition = "FUNCTION_DEFINITION",
   BeginBlock = "BEGIN_BLOCK",
   EndBlock = "END_BLOCK",
+  Unknown = "UNKNOWN",
+  Initial = "INITIAL",
 }
