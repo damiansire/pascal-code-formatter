@@ -1,5 +1,6 @@
 import { PascalToken } from "pascal-tokenizer";
 import { FormattedPascalLine } from "../shared/types";
+import { EmptyLine, WhiteSpace } from "../shared/elements";
 
 class FormatterController {
   private currentIndentationLevel: number;
@@ -31,10 +32,11 @@ class FormatterController {
   }
 
   public addEmptyLine(): void {
-    this.formattedLines.push({
-      tokens: [],
-      indentation: 0,
-    });
+    this.formattedLines.push(EmptyLine);
+  }
+
+  public addWhiteSpace() {
+    this.currentLineTokens.push(WhiteSpace);
   }
 
   public getFormattedLines(): FormattedPascalLine[] {

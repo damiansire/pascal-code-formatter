@@ -31,6 +31,9 @@ class PascalFormatter {
     this.structureManager.processToken(prevToken, currentToken, nextToken);
     this.formatterController.addTokenToCurrentLine(currentToken);
     const state = this.stateManager.evaluateState(currentToken, nextToken);
+    if (state.needWhiteSpace) {
+      this.formatterController.addWhiteSpace();
+    }
     if (state.isEndOfLine) {
       this.formatterController.finalizeLine();
     }
