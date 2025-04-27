@@ -1,6 +1,7 @@
 import { tokenizePascal, PascalToken } from "pascal-tokenizer";
 import { FormatPascalCodeOptions } from "../shared/types";
 import { FormatterController } from "./formatter.controller";
+import { StructureManager } from "./structure-manager";
 import { StateManager } from "./state-manager";
 
 class PascalFormatter {
@@ -8,11 +9,13 @@ class PascalFormatter {
   private options: FormatPascalCodeOptions;
   private formatterController: FormatterController;
   private stateManager: StateManager;
+  private structureManager: StructureManager;
   constructor(private code: string, options: FormatPascalCodeOptions) {
     this.tokens = tokenizePascal(this.code);
     this.options = options;
     this.formatterController = new FormatterController();
     this.stateManager = new StateManager();
+    this.structureManager = new StructureManager();
   }
 
   format() {
@@ -27,6 +30,7 @@ class PascalFormatter {
   processToken(prevToken: PascalToken, currentToken: PascalToken, nextToken: PascalToken) {
     this.stateManager.processToken(prevToken, currentToken, nextToken);
     this.formatterController.addTokenToCurrentLine(currentToken);
+
     if (this.stateManager.needAddEmptyLine()) {
       this.formatterController.addEmptyLine();
     }
