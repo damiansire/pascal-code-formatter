@@ -17,6 +17,7 @@ class StateManager {
         needWhiteSpace = true;
       }
     }
+
     return { isEndOfLine, needWhiteSpace };
   }
 }

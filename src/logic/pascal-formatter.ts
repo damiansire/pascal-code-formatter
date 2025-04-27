@@ -27,6 +27,7 @@ class PascalFormatter {
     }
     return this.formatterController.getFormattedLines();
   }
+
   processToken(prevToken: PascalToken, currentToken: PascalToken, nextToken: PascalToken) {
     this.structureManager.processToken(prevToken, currentToken, nextToken);
     this.formatterController.addTokenToCurrentLine(currentToken);

@@ -19,7 +19,7 @@ class StructureManager {
   }
 
   needAddEmptyLine() {
-    if (this.currentState === ProgramStructureState.Initial || this.prevState === ProgramStructureState.Initial) {
+    if (this.currentState === ProgramStructureState.Initial || this.nextState === ProgramStructureState.Initial) {
       return false;
     }
     return this.currentState !== this.nextState;
