@@ -1,6 +1,6 @@
 import { formatPascalCode } from "../formatter";
 import { FormattedPascalLine } from "../shared/types";
-import { whiteSpace, EmptyLine } from "../shared/elements";
+import { WhiteSpace, EmptyLine } from "../shared/elements";
 
 describe("formatPascalCode", () => {
   /*
@@ -16,7 +16,7 @@ describe("formatPascalCode", () => {
       {
         tokens: [
           { type: "KEYWORD", value: "program" },
-          whiteSpace,
+          WhiteSpace,
           { type: "IDENTIFIER", value: "Test" },
           { type: "DELIMITER_SEMICOLON", value: ";" },
         ],
@@ -32,7 +32,7 @@ describe("formatPascalCode", () => {
       {
         tokens: [
           { type: "KEYWORD", value: "program" },
-          whiteSpace,
+          WhiteSpace,
           { type: "IDENTIFIER", value: "Test" },
           { type: "DELIMITER_SEMICOLON", value: ";" },
         ],
@@ -47,21 +47,21 @@ describe("formatPascalCode", () => {
         tokens: [
           { type: "IDENTIFIER", value: "x" },
           { type: "DELIMITER_COLON", value: ":" },
-          whiteSpace,
+          WhiteSpace,
           { type: "KEYWORD", value: "integer" },
           { type: "DELIMITER_SEMICOLON", value: ";" },
         ],
-        indentation: 0,
+        indentation: 1,
       },
       {
         tokens: [
-          { type: "IDENTIFIER", value: "x" },
+          { type: "IDENTIFIER", value: "y" },
           { type: "DELIMITER_COLON", value: ":" },
-          whiteSpace,
+          WhiteSpace,
           { type: "KEYWORD", value: "integer" },
           { type: "DELIMITER_SEMICOLON", value: ";" },
         ],
-        indentation: 0,
+        indentation: 1,
       },
       EmptyLine,
       {
@@ -101,7 +101,7 @@ describe("formatPascalCode", () => {
       {
         tokens: [
           { type: "KEYWORD", value: "program" },
-          whiteSpace,
+          WhiteSpace,
           { type: "IDENTIFIER", value: "Test" },
           { type: "DELIMITER_SEMICOLON", value: ";" },
         ],
@@ -116,7 +116,7 @@ describe("formatPascalCode", () => {
         tokens: [
           { type: "IDENTIFIER", value: "x" },
           { type: "DELIMITER_COLON", value: ":" },
-          whiteSpace,
+          WhiteSpace,
           { type: "KEYWORD", value: "integer" },
           { type: "DELIMITER_SEMICOLON", value: ";" },
         ],
@@ -144,7 +144,7 @@ describe("formatPascalCode", () => {
       {
         tokens: [
           { type: "KEYWORD", value: "uses" },
-          whiteSpace,
+          WhiteSpace,
           { type: "IDENTIFIER", value: "Crt" },
           { type: "DELIMITER_SEMICOLON", value: ";" },
         ],
