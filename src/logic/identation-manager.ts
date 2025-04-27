@@ -24,6 +24,7 @@ class IdentationManager {
     this.indentationStack = new CounterweightStack<PascalToken>(rules);
   }
   evaluateLineIndentation(tokens: PascalToken[]) {
+    const currentIndent = this.indentationStack.size();
     for (const token of tokens) {
       this.indentationStack.pop(token);
     }
@@ -32,7 +33,7 @@ class IdentationManager {
         this.indentationStack.push(token);
       }
     }
-    return this.indentationStack.size();
+    return currentIndent;
   }
 }
 
