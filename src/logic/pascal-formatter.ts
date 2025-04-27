@@ -28,10 +28,13 @@ class PascalFormatter {
     return this.formatterController.getFormattedLines();
   }
   processToken(prevToken: PascalToken, currentToken: PascalToken, nextToken: PascalToken) {
-    this.stateManager.processToken(prevToken, currentToken, nextToken);
+    this.structureManager.processToken(prevToken, currentToken, nextToken);
     this.formatterController.addTokenToCurrentLine(currentToken);
-
-    if (this.stateManager.needAddEmptyLine()) {
+    const state = this.stateManager.evaluateState(currentToken, nextToken);
+    if (state.isEndOfLine) {
+      this.formatterController.finalizeLine();
+    }
+    if (this.structureManager.needAddEmptyLine()) {
       this.formatterController.addEmptyLine();
     }
   }
