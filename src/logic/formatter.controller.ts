@@ -30,6 +30,13 @@ class FormatterController {
     }
   }
 
+  public addEmptyLine(): void {
+    this.formattedLines.push({
+      tokens: [],
+      indentation: 0,
+    });
+  }
+
   public getFormattedLines(): FormattedPascalLine[] {
     return this.formattedLines;
   }

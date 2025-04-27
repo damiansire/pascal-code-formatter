@@ -7,20 +7,26 @@ class StateManager {
   nextState: ProgramStructureState = ProgramStructureState.Initial;
   constructor() {}
   processToken(prevToken: PascalToken, currentToken: PascalToken, nextToken: PascalToken) {
-    this.prevState = this.currentState;
-    this.currentState = this.getTokenState(currentToken);
-    this.nextState = this.getTokenState(nextToken);
+    const newState = this.getTokenState(currentToken);
+    if (newState !== ProgramStructureState.Unknown) {
+      this.prevState = this.currentState;
+      this.currentState = newState;
+    }
+    const newNextState = this.getTokenState(nextToken);
+    if (newNextState !== ProgramStructureState.Unknown) {
+      this.nextState = newNextState;
+    }
   }
 
-  needAddNewLine() {
-    if (this.currentState === ProgramStructureState.Initial) {
+  needAddEmptyLine() {
+    if (this.currentState === ProgramStructureState.Initial || this.prevState === ProgramStructureState.Initial) {
       return false;
     }
     return this.currentState !== this.nextState;
   }
 
   getTokenState(token: PascalToken): ProgramStructureState {
-    if (token.type === "KEYWORD") {
+    if (token?.type === "KEYWORD") {
       if (token.value === "program") {
         return ProgramStructureState.ProgramNameDeclaration;
       } else if (token.value === "var") {

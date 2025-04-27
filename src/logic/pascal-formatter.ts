@@ -22,10 +22,14 @@ class PascalFormatter {
       const nextToken = this.tokens[index + 1];
       this.processToken(prevToken, currentToken, nextToken);
     }
-    return [];
+    return this.formatterController.getFormattedLines();
   }
   processToken(prevToken: PascalToken, currentToken: PascalToken, nextToken: PascalToken) {
     this.stateManager.processToken(prevToken, currentToken, nextToken);
+    this.formatterController.addTokenToCurrentLine(currentToken);
+    if (this.stateManager.needAddEmptyLine()) {
+      this.formatterController.addEmptyLine();
+    }
   }
 }
 
