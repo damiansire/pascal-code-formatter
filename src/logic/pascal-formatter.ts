@@ -11,7 +11,7 @@ class PascalFormatter {
   private stateManager: StateManager;
   private structureManager: StructureManager;
   constructor(private code: string, options: FormatPascalCodeOptions) {
-    this.tokens = tokenizePascal(this.code);
+    this.tokens = tokenizePascal(this.code, false);
     this.options = options;
     this.formatterController = new FormatterController();
     this.stateManager = new StateManager();
