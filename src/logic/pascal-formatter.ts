@@ -1,21 +1,16 @@
 import { tokenizePascal, PascalToken } from "pascal-tokenizer";
 import { FormatPascalCodeOptions } from "../shared/types";
 import { FormatterController } from "./formatter.controller";
-import { StructureManager } from "./structure-manager";
-import { StateManager } from "./state-manager";
+import { isEndOfLine, needWhiteSpace } from "../shared/libs";
 
 class PascalFormatter {
   private tokens: PascalToken[];
   private options: FormatPascalCodeOptions;
   private formatterController: FormatterController;
-  private stateManager: StateManager;
-  private structureManager: StructureManager;
   constructor(private code: string, options: FormatPascalCodeOptions) {
     this.tokens = tokenizePascal(this.code, false);
     this.options = options;
     this.formatterController = new FormatterController();
-    this.stateManager = new StateManager();
-    this.structureManager = new StructureManager();
   }
 
   format() {
@@ -28,6 +23,7 @@ class PascalFormatter {
 
     let formattedLines = this.formatterController.getFormattedLines();
 
+    /*
     //Final review according to the parameters
     if (this.options.ignoreEOF) {
       if (formattedLines.at(-1)?.tokens.at(-1)?.type === "EOF") {
@@ -38,22 +34,22 @@ class PascalFormatter {
         }
       }
     }
-    
+    */
+
     return this.formatterController.getFormattedLines();
   }
 
   processToken(prevToken: PascalToken, currentToken: PascalToken, nextToken: PascalToken) {
-    this.structureManager.processToken(prevToken, currentToken, nextToken);
     this.formatterController.addTokenToCurrentLine(currentToken);
-    const state = this.stateManager.evaluateState(currentToken, nextToken);
-    if (state.needWhiteSpace) {
+
+    const addWhiteSpace = needWhiteSpace(currentToken, nextToken);
+    if (addWhiteSpace) {
       this.formatterController.addWhiteSpace();
     }
-    if (state.isEndOfLine) {
+
+    const finishLine = isEndOfLine(currentToken, nextToken)
+    if (finishLine) {
       this.formatterController.finalizeLine();
-    }
-    if (this.structureManager.needAddEmptyLine()) {
-      this.formatterController.addEmptyLine();
     }
   }
 }

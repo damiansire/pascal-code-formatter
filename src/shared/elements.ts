@@ -5,4 +5,5 @@ export const WhiteSpace: PascalToken = { type: "WHITESPACE", value: " " };
 export const EmptyLine: FormattedPascalLine = {
   tokens: [],
   indentation: 0,
+  type: "EMPTY"
 };

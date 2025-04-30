@@ -55,6 +55,31 @@ export const needWhiteSpace = (currentToken: PascalToken, nextToken: PascalToken
   return { needWhiteSpace };
 }
 
+/*
+  needAddEmptyLine() {
+    if (this.currentState === ProgramStructureState.Initial || this.nextState === ProgramStructureState.Initial) {
+      return false;
+    }
+    return this.currentState !== this.nextState;
+  }
+
+  getTokenState(token: PascalToken): ProgramStructureState {
+    if (token?.type === "KEYWORD") {
+      if (token.value === "program") {
+        return ProgramStructureState.ProgramNameDeclaration;
+      } else if (token.value === "var") {
+        return ProgramStructureState.VarDeclaration;
+      } else if (token.value === "begin" || token.value === "end") {
+        return ProgramStructureState.CodeDeclaration;
+      } else if (token.value === "procedure") {
+        return ProgramStructureState.ProcedureDefinition;
+      } else if (token.value === "function") {
+        return ProgramStructureState.FunctionDefinition;
+      }
+    }
+    return ProgramStructureState.Unknown;
+  }
+*/
 
 
 export { isComment, isOperator, isEndOfLine };
