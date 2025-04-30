@@ -100,4 +100,86 @@ describe("formatPascalCode", () => {
 
     expect(formatPascalCode(input, { ignoreEOF: true })).toEqual(expected);
   });
+
+  test("should format if-then-else with comments", () => {
+    // Wrap the fragment in a minimal program structure for a valid test
+    const input = `program TestIfElse;
+var temperaturaActual: integer;
+begin
+  temperaturaActual := 30; // Example assignment
+  if temperaturaActual > 25 (* Comprueba si la temperatura supera los 25 grados *)
+  then begin
+    writeln('¡Hace calor! Enciende el aire acondicionado.'); (* Acción si hace calor *)
+  end else begin
+    writeln('Temperatura agradable. Aire acondicionado apagado'); (* Acción si no hace calor *)
+  end; // Semicolon added for syntax
+end.
+`;
+
+    const expected: FormattedPascalLine[] = [
+      {
+        tokens: [
+          { type: "KEYWORD", value: "program" }, WhiteSpace, { type: "IDENTIFIER", value: "TestIfElse" }, { type: "DELIMITER_SEMICOLON", value: ";" }
+        ], indentation: 0
+      },
+      EmptyLine,
+      {
+        tokens: [{ type: "KEYWORD", value: "var" }], indentation: 0
+      },
+      {
+        tokens: [
+          { type: "IDENTIFIER", value: "temperaturaActual" }, { type: "DELIMITER_COLON", value: ":" }, WhiteSpace, { type: "KEYWORD", value: "integer" }, { type: "DELIMITER_SEMICOLON", value: ";" }
+        ], indentation: 1
+      },
+      EmptyLine,
+      {
+        tokens: [{ type: "KEYWORD", value: "begin" }], indentation: 0
+      },
+      { 
+        tokens: [
+          { type: "IDENTIFIER", value: "temperaturaActual" }, WhiteSpace, { type: "OPERATOR_ASSIGN", value: ":=" }, WhiteSpace, { type: "NUMBER_INTEGER", value: "30" }, { type: "DELIMITER_SEMICOLON", value: ";" }
+        ], indentation: 1
+      },
+      EmptyLine, 
+      { 
+        tokens: [
+          { type: "KEYWORD", value: "if" }, WhiteSpace, { type: "IDENTIFIER", value: "temperaturaActual" }, WhiteSpace, { type: "OPERATOR_GREATER", value: ">" }, WhiteSpace, { type: "NUMBER_INTEGER", value: "25" }, WhiteSpace, { type: "COMMENT_STAR", value: "(* Comprueba si la temperatura supera los 25 grados *)" }
+        ], indentation: 1
+      },
+      { 
+        tokens: [{ type: "KEYWORD", value: "then" }], indentation: 1
+      },
+      { 
+        tokens: [{ type: "KEYWORD", value: "begin" }], indentation: 2
+      },
+      { 
+        tokens: [
+          { type: "IDENTIFIER", value: "writeln" }, { type: "DELIMITER_LPAREN", value: "(" }, { type: "STRING_LITERAL", value: "¡Hace calor! Enciende el aire acondicionado." }, { type: "DELIMITER_RPAREN", value: ")" }, { type: "DELIMITER_SEMICOLON", value: ";" }, WhiteSpace, { type: "COMMENT_STAR", value: "(* Acción si hace calor *)" }
+        ], indentation: 3
+      },
+      { 
+        tokens: [{ type: "KEYWORD", value: "end" }], indentation: 2
+      },
+      { 
+        tokens: [{ type: "KEYWORD", value: "else" }], indentation: 1
+      },
+      { 
+        tokens: [{ type: "KEYWORD", value: "begin" }], indentation: 2
+      },
+      { 
+        tokens: [
+          { type: "IDENTIFIER", value: "writeln" }, { type: "DELIMITER_LPAREN", value: "(" }, { type: "STRING_LITERAL", value: "Temperatura agradable. Aire acondicionado apagado" }, { type: "DELIMITER_RPAREN", value: ")" }, { type: "DELIMITER_SEMICOLON", value: ";" }, WhiteSpace, { type: "COMMENT_STAR", value: "(* Acción si no hace calor *)" }
+        ], indentation: 3
+      },
+      { 
+        tokens: [{ type: "KEYWORD", value: "end" }, { type: "DELIMITER_SEMICOLON", value: ";" }], indentation: 2
+      },
+      { 
+        tokens: [{ type: "KEYWORD", value: "end" }, { type: "DELIMITER_DOT", value: "." }], indentation: 0
+      }
+    ];
+
+    expect(formatPascalCode(input, { ignoreEOF: true })).toEqual(expected);
+  });
+
 });
