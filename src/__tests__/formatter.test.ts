@@ -14,11 +14,13 @@ describe("formatPascalCode", () => {
           { type: "DELIMITER_SEMICOLON", value: ";" },
         ],
         indentation: 0,
+        type: "UNKNOWN"
       },
       EmptyLine,
       {
         tokens: [{ type: "KEYWORD", value: "var" }],
         indentation: 0,
+        type: "UNKNOWN"
       },
       {
         tokens: [
@@ -29,6 +31,7 @@ describe("formatPascalCode", () => {
           { type: "DELIMITER_SEMICOLON", value: ";" },
         ],
         indentation: 1,
+        type: "UNKNOWN"
       },
       {
         tokens: [
@@ -39,11 +42,13 @@ describe("formatPascalCode", () => {
           { type: "DELIMITER_SEMICOLON", value: ";" },
         ],
         indentation: 1,
+        type: "UNKNOWN"
       },
       EmptyLine,
       {
         tokens: [{ type: "KEYWORD", value: "begin" }],
         indentation: 0,
+        type: "UNKNOWN"
       },
       {
         tokens: [
@@ -51,6 +56,7 @@ describe("formatPascalCode", () => {
           { type: "DELIMITER_DOT", value: "." },
         ],
         indentation: 0,
+        type: "UNKNOWN"
       },
     ];
     expect(formatPascalCode(input, { ignoreEOF: true })).toEqual(expected);
@@ -69,11 +75,13 @@ describe("formatPascalCode", () => {
           { type: "DELIMITER_SEMICOLON", value: ";" },
         ],
         indentation: 0,
+        type: "UNKNOWN"
       },
       EmptyLine,
       {
         tokens: [{ type: "KEYWORD", value: "begin" }],
         indentation: 0,
+        type: "UNKNOWN"
       },
       {
         tokens: [
@@ -86,6 +94,7 @@ describe("formatPascalCode", () => {
           { type: "COMMENT_STAR", value: "(* Muestra un mensaje en pantalla *)" },
         ],
         indentation: 1,
+        type: "UNKNOWN"
       },
       {
         tokens: [
@@ -95,6 +104,7 @@ describe("formatPascalCode", () => {
           { type: "COMMENT_STAR", value: "(* El punto final es crucial! *)" },
         ],
         indentation: 0,
+        type: "UNKNOWN"
       },
     ];
 
@@ -120,59 +130,73 @@ end.
       {
         tokens: [
           { type: "KEYWORD", value: "program" }, WhiteSpace, { type: "IDENTIFIER", value: "TestIfElse" }, { type: "DELIMITER_SEMICOLON", value: ";" }
-        ], indentation: 0
+        ], indentation: 0,
+        type: "UNKNOWN"
       },
       EmptyLine,
       {
-        tokens: [{ type: "KEYWORD", value: "var" }], indentation: 0
+        tokens: [{ type: "KEYWORD", value: "var" }], indentation: 0,
+        type: "UNKNOWN"
       },
       {
         tokens: [
           { type: "IDENTIFIER", value: "temperaturaActual" }, { type: "DELIMITER_COLON", value: ":" }, WhiteSpace, { type: "KEYWORD", value: "integer" }, { type: "DELIMITER_SEMICOLON", value: ";" }
-        ], indentation: 1
+        ], indentation: 1,
+        type: "UNKNOWN"
       },
       EmptyLine,
       {
-        tokens: [{ type: "KEYWORD", value: "begin" }], indentation: 0
+        tokens: [{ type: "KEYWORD", value: "begin" }], indentation: 0,
+        type: "UNKNOWN"
       },
-      { 
+      {
         tokens: [
           { type: "IDENTIFIER", value: "temperaturaActual" }, WhiteSpace, { type: "OPERATOR_ASSIGN", value: ":=" }, WhiteSpace, { type: "NUMBER_INTEGER", value: "30" }, { type: "DELIMITER_SEMICOLON", value: ";" }
-        ], indentation: 1
+        ], indentation: 1,
+        type: "UNKNOWN"
       },
-      EmptyLine, 
-      { 
+      EmptyLine,
+      {
         tokens: [
           { type: "KEYWORD", value: "if" }, WhiteSpace, { type: "IDENTIFIER", value: "temperaturaActual" }, WhiteSpace, { type: "OPERATOR_GREATER_EQUAL", value: ">=" }, WhiteSpace, { type: "NUMBER_INTEGER", value: "25" }, WhiteSpace, { type: "KEYWORD", value: "then" }, WhiteSpace, { type: "COMMENT_STAR", value: "(* Comprueba si la temperatura es igual o superior a 25 grados *)" }
-        ], indentation: 1
+        ], indentation: 1,
+        type: "UNKNOWN"
       },
-      { 
-        tokens: [{ type: "KEYWORD", value: "begin" }], indentation: 1
+      {
+        tokens: [{ type: "KEYWORD", value: "begin" }], indentation: 1,
+        type: "UNKNOWN"
       },
-      { 
+      {
         tokens: [
           { type: "IDENTIFIER", value: "writeln" }, { type: "DELIMITER_LPAREN", value: "(" }, { type: "STRING_LITERAL", value: "¡Hace calor! Enciende el aire acondicionado." }, { type: "DELIMITER_RPAREN", value: ")" }, { type: "DELIMITER_SEMICOLON", value: ";" }, WhiteSpace, { type: "COMMENT_STAR", value: "(* Acción si hace calor *)" }
-        ], indentation: 2
+        ], indentation: 2,
+        type: "UNKNOWN"
       },
-      { 
-        tokens: [{ type: "KEYWORD", value: "end" }], indentation: 1
+      {
+        tokens: [{ type: "KEYWORD", value: "end" }], indentation: 1,
+        type: "UNKNOWN"
       },
-      { 
-        tokens: [{ type: "KEYWORD", value: "else" }], indentation: 1
+      {
+        tokens: [{ type: "KEYWORD", value: "else" }], indentation: 1,
+        type: "UNKNOWN"
       },
-      { 
-        tokens: [{ type: "KEYWORD", value: "begin" }], indentation: 1
+      {
+        tokens: [{ type: "KEYWORD", value: "begin" }], indentation: 1,
+        type: "UNKNOWN"
       },
-      { 
+      {
         tokens: [
           { type: "IDENTIFIER", value: "writeln" }, { type: "DELIMITER_LPAREN", value: "(" }, { type: "STRING_LITERAL", value: "Temperatura agradable. Aire acondicionado apagado" }, { type: "DELIMITER_RPAREN", value: ")" }, { type: "DELIMITER_SEMICOLON", value: ";" }, WhiteSpace, { type: "COMMENT_STAR", value: "(* Acción si no hace calor *)" }
-        ], indentation: 2
+        ], indentation: 2,
+        type: "UNKNOWN"
       },
-      { 
-        tokens: [{ type: "KEYWORD", value: "end" }, { type: "DELIMITER_SEMICOLON", value: ";" }], indentation: 1
+      {
+        tokens: [{ type: "KEYWORD", value: "end" }, { type: "DELIMITER_SEMICOLON", value: ";" }], indentation: 1,
+        type: "UNKNOWN"
       },
-      { 
-        tokens: [{ type: "KEYWORD", value: "end" }, { type: "DELIMITER_DOT", value: "." }], indentation: 0
+      {
+        tokens: [{ type: "KEYWORD", value: "end" }, { type: "DELIMITER_DOT", value: "." }], indentation: 0,
+        type: "UNKNOWN"
       }
     ];
 

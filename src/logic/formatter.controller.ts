@@ -24,6 +24,7 @@ class FormatterController {
       this.formattedLines.push({
         tokens: [...this.currentLineTokens],
         indentation: deepLine,
+        type: "ASSIGNMENT",
       });
       this.currentLineTokens = [];
     }

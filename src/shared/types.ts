@@ -1,6 +1,6 @@
 import { PascalToken } from "pascal-tokenizer";
 
-export type LineType = "ASSIGNMENT" | "UNKNOWN";
+export type LineType = "ASSIGNMENT" | "PROGRAM_NAME" | "CONST_DECLARATION" | "TYPE_DECLARATION" | "VAR_DECLARATION" | "PROCEDURE_DEFINITION" | "FUNCTION_DEFINITION" | "CODE_DECLARATION" | "UNKNOWN" | "INITIAL" | "EMPTY" | "UNKNOWN";
 
 export interface FormattedPascalLine {
   tokens: PascalToken[];
@@ -13,15 +13,4 @@ export interface FormatPascalCodeOptions {
   addEmptyFinalLine?: boolean;
 }
 
-export enum ProgramStructureState {
-  ProgramNameDeclaration = "PROGRAM_NAME_DECLARATION",
-  ConstDeclaration = "CONST_DECLARATION",
-  TypeDeclaration = "TYPE_DECLARATION",
-  VarDeclaration = "VAR_DECLARATION",
-  ProcedureDefinition = "PROCEDURE_DEFINITION",
-  FunctionDefinition = "FUNCTION_DEFINITION",
-  CodeDeclaration = "CODE_DECLARATION",
-  Unknown = "UNKNOWN",
-  Initial = "INITIAL",
-}
 
