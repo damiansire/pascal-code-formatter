@@ -1,8 +1,11 @@
 import { PascalToken } from "pascal-tokenizer";
 
+export type LineType = "ASSIGNMENT" | "UNKNOWN";
+
 export interface FormattedPascalLine {
   tokens: PascalToken[];
   indentation: number;
+  type: LineType;
 }
 
 export interface FormatPascalCodeOptions {
@@ -21,3 +24,4 @@ export enum ProgramStructureState {
   Unknown = "UNKNOWN",
   Initial = "INITIAL",
 }
+
