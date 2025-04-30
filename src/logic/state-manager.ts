@@ -1,5 +1,5 @@
 import { PascalToken } from "pascal-tokenizer";
-import { isComment } from "../shared/libs";
+import { isComment, isOperator } from "../shared/libs";
 
 class StateManager {
   constructor() {}
@@ -31,7 +31,7 @@ class StateManager {
         needWhiteSpace = true;
       }
     }
-    if(currentToken.type === "IDENTIFIER" && nextToken.type === "OPERATOR_ASSIGN"){
+    if(currentToken.type === "IDENTIFIER" && isOperator(nextToken)){
       needWhiteSpace = true;
     }
 
