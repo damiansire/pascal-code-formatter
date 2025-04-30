@@ -8,5 +8,53 @@ const isOperator = (token: PascalToken): boolean => {
   return ["OPERATOR_EQUAL", "OPERATOR_ASSIGN", "OPERATOR_GREATER", "OPERATOR_LESS"].includes(token?.type);
 };
 
+const isEndOfLine = (currentToken: PascalToken, nextToken: PascalToken): boolean => {
+  if (!isComment(nextToken)) {
+    if (isComment(currentToken)) {
+      return true;
+    }
+    if (currentToken.type === "DELIMITER_SEMICOLON") {
+      return true;
+    }
+    if (currentToken.type === "KEYWORD") {
+      if (["begin", "var"].includes(currentToken.value)) {
+        return true;
+      }
+    }
+    if (nextToken === undefined) {
+      return true;
+    }
+  }
+  return false;
+}
 
-export { isComment, isOperator };
+export const needWhiteSpace = (currentToken: PascalToken, nextToken: PascalToken) => {
+  let needWhiteSpace = false;
+
+  //whitespace evaluator
+  if (currentToken.type === "KEYWORD") {
+    if (currentToken.value === "program") {
+      needWhiteSpace = true;
+    }
+  }
+  if (currentToken.type === "IDENTIFIER" && isOperator(nextToken)) {
+    needWhiteSpace = true;
+  }
+
+  if (currentToken.type === "OPERATOR_ASSIGN") {
+    needWhiteSpace = true;
+  }
+
+  if (currentToken.type === "DELIMITER_COLON" && nextToken.type !== "OPERATOR_EQUAL") {
+    needWhiteSpace = true;
+  }
+  if (isComment(nextToken)) {
+    needWhiteSpace = true;
+  }
+
+  return { needWhiteSpace };
+}
+
+
+
+export { isComment, isOperator, isEndOfLine };
