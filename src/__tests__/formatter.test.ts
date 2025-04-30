@@ -106,8 +106,8 @@ describe("formatPascalCode", () => {
     const input = `program TestIfElse;
 var temperaturaActual: integer;
 begin
-  temperaturaActual := 30; // Example assignment
-  if temperaturaActual > 25 (* Comprueba si la temperatura supera los 25 grados *)
+  temperaturaActual := 30;
+  if temperaturaActual >= 25 (* Comprueba si la temperatura es igual o superior a 25 grados *)
   then begin
     writeln('¡Hace calor! Enciende el aire acondicionado.'); (* Acción si hace calor *)
   end else begin
@@ -143,36 +143,33 @@ end.
       EmptyLine, 
       { 
         tokens: [
-          { type: "KEYWORD", value: "if" }, WhiteSpace, { type: "IDENTIFIER", value: "temperaturaActual" }, WhiteSpace, { type: "OPERATOR_GREATER", value: ">" }, WhiteSpace, { type: "NUMBER_INTEGER", value: "25" }, WhiteSpace, { type: "COMMENT_STAR", value: "(* Comprueba si la temperatura supera los 25 grados *)" }
+          { type: "KEYWORD", value: "if" }, WhiteSpace, { type: "IDENTIFIER", value: "temperaturaActual" }, WhiteSpace, { type: "OPERATOR_GREATER_EQUAL", value: ">=" }, WhiteSpace, { type: "NUMBER_INTEGER", value: "25" }, WhiteSpace, { type: "KEYWORD", value: "then" }, WhiteSpace, { type: "COMMENT_STAR", value: "(* Comprueba si la temperatura es igual o superior a 25 grados *)" }
         ], indentation: 1
       },
       { 
-        tokens: [{ type: "KEYWORD", value: "then" }], indentation: 1
-      },
-      { 
-        tokens: [{ type: "KEYWORD", value: "begin" }], indentation: 2
+        tokens: [{ type: "KEYWORD", value: "begin" }], indentation: 1
       },
       { 
         tokens: [
           { type: "IDENTIFIER", value: "writeln" }, { type: "DELIMITER_LPAREN", value: "(" }, { type: "STRING_LITERAL", value: "¡Hace calor! Enciende el aire acondicionado." }, { type: "DELIMITER_RPAREN", value: ")" }, { type: "DELIMITER_SEMICOLON", value: ";" }, WhiteSpace, { type: "COMMENT_STAR", value: "(* Acción si hace calor *)" }
-        ], indentation: 3
+        ], indentation: 2
       },
       { 
-        tokens: [{ type: "KEYWORD", value: "end" }], indentation: 2
+        tokens: [{ type: "KEYWORD", value: "end" }], indentation: 1
       },
       { 
         tokens: [{ type: "KEYWORD", value: "else" }], indentation: 1
       },
       { 
-        tokens: [{ type: "KEYWORD", value: "begin" }], indentation: 2
+        tokens: [{ type: "KEYWORD", value: "begin" }], indentation: 1
       },
       { 
         tokens: [
           { type: "IDENTIFIER", value: "writeln" }, { type: "DELIMITER_LPAREN", value: "(" }, { type: "STRING_LITERAL", value: "Temperatura agradable. Aire acondicionado apagado" }, { type: "DELIMITER_RPAREN", value: ")" }, { type: "DELIMITER_SEMICOLON", value: ";" }, WhiteSpace, { type: "COMMENT_STAR", value: "(* Acción si no hace calor *)" }
-        ], indentation: 3
+        ], indentation: 2
       },
       { 
-        tokens: [{ type: "KEYWORD", value: "end" }, { type: "DELIMITER_SEMICOLON", value: ";" }], indentation: 2
+        tokens: [{ type: "KEYWORD", value: "end" }, { type: "DELIMITER_SEMICOLON", value: ";" }], indentation: 1
       },
       { 
         tokens: [{ type: "KEYWORD", value: "end" }, { type: "DELIMITER_DOT", value: "." }], indentation: 0
