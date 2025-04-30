@@ -1,7 +1,6 @@
 import { CounterweightStack, CounterweightRule } from "counterweight-stack";
 import { deepEqual } from "objects-deep-compare";
 import { PascalToken } from "pascal-tokenizer";
-import { Stack } from "../shared/stack";
 
 const beginToken: PascalToken = { type: "KEYWORD", value: "begin" };
 const endToken: PascalToken = { type: "KEYWORD", value: "end" };

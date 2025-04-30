@@ -1,27 +1,41 @@
 import { tokenizePascal, PascalToken } from "pascal-tokenizer";
-import { FormatPascalCodeOptions } from "../shared/types";
+import { FormatPascalCodeOptions, FormattedPascalLine, InternalFormattedPascalLine, LineType } from "../shared/types";
 import { FormatterController } from "./formatter.controller";
-import { isEndOfLine, needWhiteSpace } from "../shared/libs";
-
+import { getLineType, isEndOfLine, needAddEmptyLine, needWhiteSpace } from "../shared/libs";
+import { CounterweightStack, CounterweightRule } from "counterweight-stack";
+import { EmptyLine, HighLevelCounterWeightRules } from "../shared/elements";
 class PascalFormatter {
-  private tokens: PascalToken[];
   private options: FormatPascalCodeOptions;
   private formatterController: FormatterController;
+  private cleanFormattedLines: FormattedPascalLine[] = [];
+  private stackHistory: CounterweightStack<LineType>;
+
   constructor(private code: string, options: FormatPascalCodeOptions) {
-    this.tokens = tokenizePascal(this.code, false);
     this.options = options;
-    this.formatterController = new FormatterController();
+    const tokens = tokenizePascal(this.code, false);
+    this.formatterController = new FormatterController(tokens);
+    this.stackHistory = new CounterweightStack(HighLevelCounterWeightRules);
   }
 
-  format() {
-    for (let index = 0; index < this.tokens.length; index++) {
-      const prevToken = this.tokens[index - 1];
-      const currentToken = this.tokens[index];
-      const nextToken = this.tokens[index + 1];
-      this.processToken(prevToken, currentToken, nextToken);
+  format(): FormattedPascalLine[] {
+    const formattedLines = this.formatterController.getFormattedLines();
+    if (formattedLines.length === 0) {
+      return []
     }
 
-    let formattedLines = this.formatterController.getFormattedLines();
+    const newLine = this.convertToFormattedLine(formattedLines[0])
+    this.addToFormattedLine(newLine)
+
+    for (let index = 1; index < formattedLines.length; index++) {
+      const prevLine = this.cleanFormattedLines.at(-1);
+      const currentLine = this.convertToFormattedLine(formattedLines[index]);
+
+      const addEmptyLine = needAddEmptyLine(this.stackHistory, prevLine, currentLine)
+      if (addEmptyLine) {
+        this.addToFormattedLine(EmptyLine)
+      }
+      this.addToFormattedLine(currentLine)
+    }
 
     /*
     //Final review according to the parameters
@@ -36,22 +50,29 @@ class PascalFormatter {
     }
     */
 
-    return this.formatterController.getFormattedLines();
+    return this.cleanFormattedLines;
   }
 
-  processToken(prevToken: PascalToken, currentToken: PascalToken, nextToken: PascalToken) {
-    this.formatterController.addTokenToCurrentLine(currentToken);
-
-    const addWhiteSpace = needWhiteSpace(currentToken, nextToken);
-    if (addWhiteSpace) {
-      this.formatterController.addWhiteSpace();
-    }
-
-    const finishLine = isEndOfLine(currentToken, nextToken)
-    if (finishLine) {
-      this.formatterController.finalizeLine();
-    }
+  convertToFormattedLine(internalFormattedLine: InternalFormattedPascalLine): FormattedPascalLine {
+    return {
+      tokens: internalFormattedLine.tokens,
+      indentation: internalFormattedLine.indentation,
+      type: getLineType(this.stackHistory, internalFormattedLine.tokens),
+    };
   }
+
+  addToFormattedLine(formattedLine: FormattedPascalLine) {
+    const newLine: FormattedPascalLine = {
+      tokens: formattedLine.tokens,
+      indentation: formattedLine.indentation,
+      type: getLineType(this.stackHistory, formattedLine.tokens),
+    };
+    this.cleanFormattedLines.push(newLine)
+    this.stackHistory.push(newLine.type)
+  }
+
+
+
 }
 
 export { PascalFormatter };
