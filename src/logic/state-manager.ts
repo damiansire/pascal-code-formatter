@@ -31,6 +31,14 @@ class StateManager {
         needWhiteSpace = true;
       }
     }
+    if(currentToken.type === "IDENTIFIER" && nextToken.type === "OPERATOR_ASSIGN"){
+      needWhiteSpace = true;
+    }
+
+    if(currentToken.type === "OPERATOR_ASSIGN"){
+      needWhiteSpace = true;
+    }
+
     if (currentToken.type === "DELIMITER_COLON" && nextToken.type !== "OPERATOR_EQUAL") {
       needWhiteSpace = true;
     }
