@@ -14,13 +14,13 @@ describe("formatPascalCode", () => {
           { type: "DELIMITER_SEMICOLON", value: ";" },
         ],
         indentation: 0,
-        type: "UNKNOWN"
+        type: "PROGRAM_NAME_DECLARATION"
       },
       EmptyLine,
       {
         tokens: [{ type: "KEYWORD", value: "var" }],
         indentation: 0,
-        type: "UNKNOWN"
+        type: "VAR_DECLARATION"
       },
       {
         tokens: [
@@ -31,7 +31,7 @@ describe("formatPascalCode", () => {
           { type: "DELIMITER_SEMICOLON", value: ";" },
         ],
         indentation: 1,
-        type: "UNKNOWN"
+        type: "VAR_DECLARATION"
       },
       {
         tokens: [
@@ -42,13 +42,13 @@ describe("formatPascalCode", () => {
           { type: "DELIMITER_SEMICOLON", value: ";" },
         ],
         indentation: 1,
-        type: "UNKNOWN"
+        type: "VAR_DECLARATION"
       },
       EmptyLine,
       {
         tokens: [{ type: "KEYWORD", value: "begin" }],
         indentation: 0,
-        type: "UNKNOWN"
+        type: "BEGIN_DECLARATION"
       },
       {
         tokens: [
@@ -56,7 +56,7 @@ describe("formatPascalCode", () => {
           { type: "DELIMITER_DOT", value: "." },
         ],
         indentation: 0,
-        type: "UNKNOWN"
+        type: "END_DECLARATION"
       },
     ];
     expect(formatPascalCode(input, { ignoreEOF: true })).toEqual(expected);
