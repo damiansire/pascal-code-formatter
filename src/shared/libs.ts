@@ -26,6 +26,9 @@ const isEndOfLine = (currentToken: PascalToken, nextToken: PascalToken): boolean
     if (nextToken === undefined) {
       return true;
     }
+    if (nextToken.type === "EOF") {
+      return true;
+    }
   }
   return false;
 }
@@ -72,6 +75,12 @@ const getStructuralType = (lineType: LineType, typeStack: CounterweightStack<Str
   if (lineType in LineToStructure) {
     return LineToStructure[lineType]!;
   }
+  if (lineType === "BEGIN_DECLARATION") {
+    return "CODE_EXECUTION"
+  }
+  if (lineType === "END_DECLARATION") {
+    return "CODE_EXECUTION"
+  }
   return typeStack.peek() || "UNKNOWN";
 }
 
@@ -116,7 +125,7 @@ const needAddEmptyLine = (history: CounterweightStack<StructuralType>, prevLine:
   if (!prevLine) {
     return false;
   }
-  if (prevLine.type !== nextLine.type) {
+  if (prevLine.structuralType !== nextLine.structuralType) {
     return true;
   }
 

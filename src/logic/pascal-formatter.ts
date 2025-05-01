@@ -12,7 +12,10 @@ class PascalFormatter {
 
   constructor(private code: string, options: FormatPascalCodeOptions) {
     this.options = options;
-    const tokens = tokenizePascal(this.code, false);
+    let tokens = tokenizePascal(this.code, false);
+    if (this.options.ignoreEOF) {
+      tokens = tokens.filter(x => x.type !== "EOF")
+    }
     this.formatterController = new FormatterController(tokens);
     this.stackHistory = new CounterweightStack(StructuralElementsWeightRules);
   }
@@ -34,21 +37,11 @@ class PascalFormatter {
       if (addEmptyLine) {
         this.addToFormattedLine(EmptyLine)
       }
+
       this.addToFormattedLine(currentLine)
     }
 
-    /*
-    //Final review according to the parameters
-    if (this.options.ignoreEOF) {
-      if (formattedLines.at(-1)?.tokens.at(-1)?.type === "EOF") {
-        if (formattedLines[formattedLines.length - 1]?.tokens?.length > 1) {
-          formattedLines[formattedLines.length - 1].tokens.pop();
-        } else {
-          formattedLines.pop();
-        }
-      }
-    }
-    */
+
 
     return this.cleanFormattedLines;
   }
