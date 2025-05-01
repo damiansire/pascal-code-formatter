@@ -1,21 +1,20 @@
 import { PascalToken } from "pascal-tokenizer";
-import { FormattedPascalLine, LineType } from "./types";
+import { FormattedPascalLine, StructuralType } from "./types";
 
 export const WhiteSpace: PascalToken = { type: "WHITESPACE", value: " " };
+
 export const EmptyLine: FormattedPascalLine = {
   tokens: [],
   indentation: 0,
-  type: "EMPTY"
+  type: "EMPTY",
+  structuralType: "EMPTY",
 };
 
-const HighLevelProgramStructureElements: LineType[] = ["PROGRAM_NAME_DECLARATION", "LIBRARIES_IMPORT", "CONST_DECLARATION", "TYPE_DECLARATION", "VAR_DECLARATION", "PROCEDURE_DEFINITION", "FUNCTION_DEFINITION", "BEGIN_DECLARATION"]
+const StructuralElements: StructuralType[] = ["PROGRAM_NAME_DECLARATION", "LIBRARIES_IMPORT", "CONSTS_DECLARATION", "TYPES_DECLARATION", "VARS_DECLARATION", "PROCEDURES_DEFINITIONS", "FUNCTIONS_DEFINITIONS", "CODE_EXECUTION"]
 
-export const ProgramSections = ["PROGRAM_NAME_DECLARATION", "LIBRARIES_IMPORT", "CONST_DECLARATION", "TYPE_DECLARATION", "VAR_DECLARATION", "PROCEDURE_DEFINITION", "FUNCTION_DEFINITION"]
-
-
-export const HighLevelCounterWeightRules = HighLevelProgramStructureElements.map(element => {
+export const StructuralElementsWeightRules = StructuralElements.map(element => {
   return {
     mainElement: element,
-    counterweights: HighLevelProgramStructureElements,
+    counterweights: StructuralElements,
   }
 });
