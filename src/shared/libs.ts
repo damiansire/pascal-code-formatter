@@ -10,6 +10,10 @@ const isOperator = (token: PascalToken): boolean => {
   return ["OPERATOR_EQUAL", "OPERATOR_ASSIGN", "OPERATOR_GREATER", "OPERATOR_LESS"].includes(token?.type);
 };
 
+const isStatement = (type: LineType): boolean => {
+  return ["IF_STATEMENT", "WHILE_STATEMENT", "REPEAT_STATEMENT", "FOR_STATEMENT"].includes(type);
+};
+
 const isEndOfLine = (currentToken: PascalToken, nextToken: PascalToken): boolean => {
   if (!isComment(nextToken)) {
     if (isComment(currentToken)) {
@@ -91,6 +95,18 @@ const getLineType = (tokens: PascalToken[]): LineType => {
   if (tokens.some(token => token.value === ":=")) {
     return "ASSIGNMENT";
   }
+  if (tokens.some(token => token.value === "if")) {
+    return "IF_STATEMENT";
+  }
+  if (tokens.some(token => token.value === "while")) {
+    return "WHILE_STATEMENT";
+  }
+  if (tokens.some(token => token.value === "repeat")) {
+    return "REPEAT_STATEMENT";
+  }
+  if (tokens.some(token => token.value === "for")) {
+    return "FOR_STATEMENT";
+  }
   if (tokens.some(token => token.value === "var")) {
     return "VAR_DECLARATION";
   }
@@ -121,11 +137,15 @@ const getLineType = (tokens: PascalToken[]): LineType => {
   return "UNKNOWN";
 }
 
-const needAddEmptyLine = (history: CounterweightStack<StructuralType>, prevLine: FormattedPascalLine | undefined, nextLine: FormattedPascalLine) => {
+const needAddEmptyLine = (history: CounterweightStack<StructuralType>, prevLine: FormattedPascalLine | undefined, currentLine: FormattedPascalLine) => {
   if (!prevLine) {
     return false;
   }
-  if (prevLine.structuralType !== nextLine.structuralType) {
+  if (prevLine.structuralType !== currentLine.structuralType) {
+    return true;
+  }
+
+  if (isStatement(currentLine.type) && prevLine.type === "ASSIGNMENT") {
     return true;
   }
 

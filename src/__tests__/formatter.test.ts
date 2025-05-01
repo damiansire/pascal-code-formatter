@@ -127,8 +127,8 @@ describe("formatPascalCode", () => {
   var temperaturaActual: integer;
   begin
     temperaturaActual := 30;
-    if temperaturaActual >= 25 (* Comprueba si la temperatura es igual o superior a 25 grados *)
-    then begin
+    if temperaturaActual >= 25 then (* Comprueba si la temperatura es igual o superior a 25 grados *)
+    begin
       writeln('¡Hace calor! Enciende el aire acondicionado.'); (* Acción si hace calor *)
     end else begin
       writeln('Temperatura agradable. Aire acondicionado apagado'); (* Acción si no hace calor *)
