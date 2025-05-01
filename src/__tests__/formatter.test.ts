@@ -1,6 +1,6 @@
 import { formatPascalCode } from "../formatter";
 import { FormattedPascalLine } from "../shared/types";
-import { WhiteSpace, EmptyLine } from "../shared/elements";
+import { WhiteSpace, EmptyLine, VAR, PROGRAM, DELIMITER_SEMICOLON, DELIMITER_COLON, KEYWORD_INTEGER, KEYWORD_BEGIN } from "../shared/elements";
 
 describe("formatPascalCode", () => {
   test("should return correct result for simple program", () => {
@@ -8,10 +8,10 @@ describe("formatPascalCode", () => {
     const expected: FormattedPascalLine[] = [
       {
         tokens: [
-          { type: "KEYWORD", value: "program" },
+          PROGRAM,
           WhiteSpace,
           { type: "IDENTIFIER", value: "Test" },
-          { type: "DELIMITER_SEMICOLON", value: ";" },
+          DELIMITER_SEMICOLON,
         ],
         indentation: 0,
         type: "PROGRAM_NAME_DECLARATION",
@@ -19,7 +19,7 @@ describe("formatPascalCode", () => {
       },
       EmptyLine,
       {
-        tokens: [{ type: "KEYWORD", value: "var" }],
+        tokens: [VAR],
         indentation: 0,
         type: "VAR_DECLARATION",
         structuralType: "VARS_DECLARATION",
@@ -27,30 +27,30 @@ describe("formatPascalCode", () => {
       {
         tokens: [
           { type: "IDENTIFIER", value: "x" },
-          { type: "DELIMITER_COLON", value: ":" },
+          DELIMITER_COLON,
           WhiteSpace,
-          { type: "KEYWORD", value: "integer" },
-          { type: "DELIMITER_SEMICOLON", value: ";" },
+          KEYWORD_INTEGER,
+          DELIMITER_SEMICOLON,
         ],
         indentation: 1,
-        type: "VAR_DECLARATION",
+        type: "DECLARATION",
         structuralType: "VARS_DECLARATION",
       },
       {
         tokens: [
           { type: "IDENTIFIER", value: "y" },
-          { type: "DELIMITER_COLON", value: ":" },
+          DELIMITER_COLON,
           WhiteSpace,
-          { type: "KEYWORD", value: "integer" },
-          { type: "DELIMITER_SEMICOLON", value: ";" },
+          KEYWORD_INTEGER,
+          DELIMITER_SEMICOLON,
         ],
         indentation: 1,
-        type: "VAR_DECLARATION",
+        type: "DECLARATION",
         structuralType: "VARS_DECLARATION",
       },
       EmptyLine,
       {
-        tokens: [{ type: "KEYWORD", value: "begin" }],
+        tokens: [KEYWORD_BEGIN],
         indentation: 0,
         type: "BEGIN_DECLARATION",
         structuralType: "CODE_EXECUTION"
@@ -75,17 +75,17 @@ describe("formatPascalCode", () => {
   //     const expected: FormattedPascalLine[] = [
   //       {
   //         tokens: [
-  //           { type: "KEYWORD", value: "program" },
+  //           PROGRAM,
   //           WhiteSpace,
   //           { type: "IDENTIFIER", value: "MiPrimerPrograma" },
-  //           { type: "DELIMITER_SEMICOLON", value: ";" },
+  //           DELIMITER_SEMICOLON,
   //         ],
   //         indentation: 0,
   //         type: "UNKNOWN"
   //       },
   //       EmptyLine,
   //       {
-  //         tokens: [{ type: "KEYWORD", value: "begin" }],
+  //         tokens: [KEYWORD_BEGIN],
   //         indentation: 0,
   //         type: "UNKNOWN"
   //       },
@@ -95,7 +95,7 @@ describe("formatPascalCode", () => {
   //           { type: "DELIMITER_LPAREN", value: "(" },
   //           { type: "STRING_LITERAL", value: "Hola, mundo!" },
   //           { type: "DELIMITER_RPAREN", value: ")" },
-  //           { type: "DELIMITER_SEMICOLON", value: ";" },
+  //           DELIMITER_SEMICOLON,
   //           WhiteSpace,
   //           { type: "COMMENT_STAR", value: "(* Muestra un mensaje en pantalla *)" },
   //         ],
@@ -135,29 +135,29 @@ describe("formatPascalCode", () => {
   //     const expected: FormattedPascalLine[] = [
   //       {
   //         tokens: [
-  //           { type: "KEYWORD", value: "program" }, WhiteSpace, { type: "IDENTIFIER", value: "TestIfElse" }, { type: "DELIMITER_SEMICOLON", value: ";" }
+  //           PROGRAM, WhiteSpace, { type: "IDENTIFIER", value: "TestIfElse" }, DELIMITER_SEMICOLON
   //         ], indentation: 0,
   //         type: "UNKNOWN"
   //       },
   //       EmptyLine,
   //       {
-  //         tokens: [{ type: "KEYWORD", value: "var" }], indentation: 0,
+  //         tokens: [VAR], indentation: 0,
   //         type: "UNKNOWN"
   //       },
   //       {
   //         tokens: [
-  //           { type: "IDENTIFIER", value: "temperaturaActual" }, { type: "DELIMITER_COLON", value: ":" }, WhiteSpace, { type: "KEYWORD", value: "integer" }, { type: "DELIMITER_SEMICOLON", value: ";" }
+  //           { type: "IDENTIFIER", value: "temperaturaActual" }, DELIMITER_COLON, WhiteSpace, KEYWORD_INTEGER, DELIMITER_SEMICOLON
   //         ], indentation: 1,
   //         type: "UNKNOWN"
   //       },
   //       EmptyLine,
   //       {
-  //         tokens: [{ type: "KEYWORD", value: "begin" }], indentation: 0,
+  //         tokens: [KEYWORD_BEGIN], indentation: 0,
   //         type: "UNKNOWN"
   //       },
   //       {
   //         tokens: [
-  //           { type: "IDENTIFIER", value: "temperaturaActual" }, WhiteSpace, { type: "OPERATOR_ASSIGN", value: ":=" }, WhiteSpace, { type: "NUMBER_INTEGER", value: "30" }, { type: "DELIMITER_SEMICOLON", value: ";" }
+  //           { type: "IDENTIFIER", value: "temperaturaActual" }, WhiteSpace, { type: "OPERATOR_ASSIGN", value: ":=" }, WhiteSpace, { type: "NUMBER_INTEGER", value: "30" }, DELIMITER_SEMICOLON
   //         ], indentation: 1,
   //         type: "UNKNOWN"
   //       },
@@ -169,12 +169,12 @@ describe("formatPascalCode", () => {
   //         type: "UNKNOWN"
   //       },
   //       {
-  //         tokens: [{ type: "KEYWORD", value: "begin" }], indentation: 1,
+  //         tokens: [KEYWORD_BEGIN], indentation: 1,
   //         type: "UNKNOWN"
   //       },
   //       {
   //         tokens: [
-  //           { type: "IDENTIFIER", value: "writeln" }, { type: "DELIMITER_LPAREN", value: "(" }, { type: "STRING_LITERAL", value: "¡Hace calor! Enciende el aire acondicionado." }, { type: "DELIMITER_RPAREN", value: ")" }, { type: "DELIMITER_SEMICOLON", value: ";" }, WhiteSpace, { type: "COMMENT_STAR", value: "(* Acción si hace calor *)" }
+  //           { type: "IDENTIFIER", value: "writeln" }, { type: "DELIMITER_LPAREN", value: "(" }, { type: "STRING_LITERAL", value: "¡Hace calor! Enciende el aire acondicionado." }, { type: "DELIMITER_RPAREN", value: ")" }, DELIMITER_SEMICOLON, WhiteSpace, { type: "COMMENT_STAR", value: "(* Acción si hace calor *)" }
   //         ], indentation: 2,
   //         type: "UNKNOWN"
   //       },
@@ -187,17 +187,17 @@ describe("formatPascalCode", () => {
   //         type: "UNKNOWN"
   //       },
   //       {
-  //         tokens: [{ type: "KEYWORD", value: "begin" }], indentation: 1,
+  //         tokens: [KEYWORD_BEGIN], indentation: 1,
   //         type: "UNKNOWN"
   //       },
   //       {
   //         tokens: [
-  //           { type: "IDENTIFIER", value: "writeln" }, { type: "DELIMITER_LPAREN", value: "(" }, { type: "STRING_LITERAL", value: "Temperatura agradable. Aire acondicionado apagado" }, { type: "DELIMITER_RPAREN", value: ")" }, { type: "DELIMITER_SEMICOLON", value: ";" }, WhiteSpace, { type: "COMMENT_STAR", value: "(* Acción si no hace calor *)" }
+  //           { type: "IDENTIFIER", value: "writeln" }, { type: "DELIMITER_LPAREN", value: "(" }, { type: "STRING_LITERAL", value: "Temperatura agradable. Aire acondicionado apagado" }, { type: "DELIMITER_RPAREN", value: ")" }, DELIMITER_SEMICOLON, WhiteSpace, { type: "COMMENT_STAR", value: "(* Acción si no hace calor *)" }
   //         ], indentation: 2,
   //         type: "UNKNOWN"
   //       },
   //       {
-  //         tokens: [{ type: "KEYWORD", value: "end" }, { type: "DELIMITER_SEMICOLON", value: ";" }], indentation: 1,
+  //         tokens: [{ type: "KEYWORD", value: "end" }, DELIMITER_SEMICOLON], indentation: 1,
   //         type: "UNKNOWN"
   //       },
   //       {

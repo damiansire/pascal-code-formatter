@@ -1,8 +1,8 @@
-import { tokenizePascal, PascalToken } from "pascal-tokenizer";
-import { FormatPascalCodeOptions, FormattedPascalLine, InternalFormattedPascalLine, LineType, StructuralType } from "../shared/types";
+import { tokenizePascal } from "pascal-tokenizer";
+import { FormatPascalCodeOptions, FormattedPascalLine, InternalFormattedPascalLine, StructuralType } from "../shared/types";
 import { FormatterController } from "./formatter.controller";
-import { getLineType, getStructuralType, isEndOfLine, needAddEmptyLine, needWhiteSpace } from "../shared/libs";
-import { CounterweightStack, CounterweightRule } from "counterweight-stack";
+import { getLineType, getStructuralType, needAddEmptyLine } from "../shared/libs";
+import { CounterweightStack } from "counterweight-stack";
 import { EmptyLine, StructuralElementsWeightRules } from "../shared/elements";
 class PascalFormatter {
   private options: FormatPascalCodeOptions;
@@ -65,17 +65,9 @@ class PascalFormatter {
   }
 
   addToFormattedLine(formattedLine: FormattedPascalLine) {
-    const newLine: FormattedPascalLine = {
-      tokens: formattedLine.tokens,
-      indentation: formattedLine.indentation,
-      type: getLineType(this.stackHistory, formattedLine.tokens),
-    };
-    this.cleanFormattedLines.push(newLine)
-    this.stackHistory.push(newLine.type)
+    this.cleanFormattedLines.push(formattedLine)
+    this.stackHistory.push(formattedLine.structuralType)
   }
-
-
-
 }
 
 export { PascalFormatter };
