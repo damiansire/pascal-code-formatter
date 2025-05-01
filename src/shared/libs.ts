@@ -1,7 +1,6 @@
 import { PascalToken } from "pascal-tokenizer";
-import { FormattedPascalLine, LineType } from "./types";
+import { FormattedPascalLine, LineType, StructuralType } from './types';
 import { CounterweightStack } from "counterweight-stack";
-import { ProgramSections } from "./elements";
 
 const isComment = (token: PascalToken): boolean => {
   return ["COMMENT_STAR", "COMMENT_BLOCK_BRACE", "COMMENT_LINE"].includes(token?.type);
@@ -59,20 +58,24 @@ const needWhiteSpace = (currentToken: PascalToken, nextToken: PascalToken) => {
   return needWhiteSpace;
 }
 
-const getLineType = (typeStack: CounterweightStack<LineType>, tokens: PascalToken[]) => {
-  const internal_type = getInternalType(tokens);
-  if (internal_type === "DECLARATION") {
-    return typeStack.peek() || "UNKNOWN";
-  }
-
-  if (ProgramSections.includes(internal_type)) {
-    return internal_type;
-  }
-
-  return internal_type;
+const LineToStructure: Partial<Record<LineType, StructuralType>> = {
+  "PROGRAM_NAME_DECLARATION": "PROGRAM_NAME_DECLARATION",
+  "VAR_DECLARATION": "VARS_DECLARATION",
+  "PROCEDURE_DEFINITION": "PROCEDURES_DEFINITIONS",
+  "FUNCTION_DEFINITION": "FUNCTIONS_DEFINITIONS",
+  "CONST_DECLARATION": "CONSTS_DECLARATION",
+  "TYPE_DECLARATION": "TYPES_DECLARATION",
+  "EMPTY": "NONE",
 }
 
-const getInternalType = (tokens: PascalToken[]): LineType | "DECLARATION" => {
+const getStructuralType = (lineType: LineType, typeStack: CounterweightStack<StructuralType>): StructuralType => {
+  if (lineType in LineToStructure) {
+    return LineToStructure[lineType]!;
+  }
+  return typeStack.peek() || "UNKNOWN";
+}
+
+const getLineType = (tokens: PascalToken[]): LineType => {
   if (tokens.some(token => token.value === "program")) {
     return "PROGRAM_NAME_DECLARATION";
   }
@@ -83,10 +86,10 @@ const getInternalType = (tokens: PascalToken[]): LineType | "DECLARATION" => {
     return "VAR_DECLARATION";
   }
   if (tokens.some(token => token.value === "begin")) {
-    return "CODE_DECLARATION";
+    return "BEGIN_DECLARATION";
   }
   if (tokens.some(token => token.value === "end")) {
-    return "CODE_DECLARATION";
+    return "END_DECLARATION";
   }
   if (tokens.some(token => token.value === "procedure")) {
     return "PROCEDURE_DEFINITION";
@@ -100,11 +103,8 @@ const getInternalType = (tokens: PascalToken[]): LineType | "DECLARATION" => {
   if (tokens.some(token => token.value === "type")) {
     return "TYPE_DECLARATION";
   }
-  if (tokens.some(token => token.value === "uses")) {
-    return "LIBRARIES_IMPORT";
-  }
   if (tokens.some(token => token.value === ":")) {
-    return "DECLARATION"
+    return "DECLARATION";
   }
   if (tokens.length === 0) {
     return "EMPTY"
@@ -112,7 +112,7 @@ const getInternalType = (tokens: PascalToken[]): LineType | "DECLARATION" => {
   return "UNKNOWN";
 }
 
-const needAddEmptyLine = (history: CounterweightStack<LineType>, prevLine: FormattedPascalLine | undefined, nextLine: FormattedPascalLine) => {
+const needAddEmptyLine = (history: CounterweightStack<StructuralType>, prevLine: FormattedPascalLine | undefined, nextLine: FormattedPascalLine) => {
   if (!prevLine) {
     return false;
   }
@@ -123,4 +123,4 @@ const needAddEmptyLine = (history: CounterweightStack<LineType>, prevLine: Forma
   return false;
 }
 
-export { isComment, isOperator, isEndOfLine, needWhiteSpace, getLineType, needAddEmptyLine };
+export { isComment, isOperator, isEndOfLine, needWhiteSpace, getLineType, getStructuralType, needAddEmptyLine };

@@ -1,20 +1,20 @@
 import { tokenizePascal, PascalToken } from "pascal-tokenizer";
-import { FormatPascalCodeOptions, FormattedPascalLine, InternalFormattedPascalLine, LineType } from "../shared/types";
+import { FormatPascalCodeOptions, FormattedPascalLine, InternalFormattedPascalLine, LineType, StructuralType } from "../shared/types";
 import { FormatterController } from "./formatter.controller";
-import { getLineType, isEndOfLine, needAddEmptyLine, needWhiteSpace } from "../shared/libs";
+import { getLineType, getStructuralType, isEndOfLine, needAddEmptyLine, needWhiteSpace } from "../shared/libs";
 import { CounterweightStack, CounterweightRule } from "counterweight-stack";
-import { EmptyLine, HighLevelCounterWeightRules } from "../shared/elements";
+import { EmptyLine, StructuralElementsWeightRules } from "../shared/elements";
 class PascalFormatter {
   private options: FormatPascalCodeOptions;
   private formatterController: FormatterController;
   private cleanFormattedLines: FormattedPascalLine[] = [];
-  private stackHistory: CounterweightStack<LineType>;
+  private stackHistory: CounterweightStack<StructuralType>;
 
   constructor(private code: string, options: FormatPascalCodeOptions) {
     this.options = options;
     const tokens = tokenizePascal(this.code, false);
     this.formatterController = new FormatterController(tokens);
-    this.stackHistory = new CounterweightStack(HighLevelCounterWeightRules);
+    this.stackHistory = new CounterweightStack(StructuralElementsWeightRules);
   }
 
   format(): FormattedPascalLine[] {
@@ -54,10 +54,13 @@ class PascalFormatter {
   }
 
   convertToFormattedLine(internalFormattedLine: InternalFormattedPascalLine): FormattedPascalLine {
+    const lineType = getLineType(internalFormattedLine.tokens);
+    const structuralType = getStructuralType(lineType, this.stackHistory)
     return {
       tokens: internalFormattedLine.tokens,
       indentation: internalFormattedLine.indentation,
-      type: getLineType(this.stackHistory, internalFormattedLine.tokens),
+      type: lineType,
+      structuralType: structuralType
     };
   }
 
