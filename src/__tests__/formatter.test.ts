@@ -135,7 +135,7 @@ begin
     writeln('¡Hace calor! Enciende el aire acondicionado.'); (* Acción si hace calor *)
   end else begin
     writeln('Temperatura agradable. Aire acondicionado apagado'); (* Acción si no hace calor *)
-  end; // Semicolon added for syntax
+  end;
 end.`;
 
     const expected: FormattedPascalLine[] = [
@@ -166,7 +166,11 @@ end.`;
       elseStatement(),
       begin(1),
       writeln("Temperatura agradable. Aire acondicionado apagado", "Acción si no hace calor", 2),
-      end(1),
+      line(
+        [
+          { type: "KEYWORD", value: "end" },
+          { type: "DELIMITER_SEMICOLON", value: ";" },
+        ], 1, "END_DECLARATION", "CODE_EXECUTION"),
       end(0, true)
     ];
     expect(formatPascalCode(input, { ignoreEOF: true })).toEqual(expected);

@@ -29,9 +29,10 @@ const isEndOfLine = (currentToken: PascalToken, nextToken: PascalToken): boolean
     if (["begin", "var", "else"].includes(currentToken.value)) {
       return true;
     }
-
-    if (currentToken.value === "end" && nextToken.value !== ".") {
-      return true;
+    if (currentToken.value === "end") {
+      if (nextToken.value !== "." && nextToken.value !== ";") {
+        return true;
+      }
     }
   }
   if (nextToken === undefined) {
