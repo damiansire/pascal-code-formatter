@@ -175,7 +175,7 @@ describe("formatPascalCode", () => {
         tokens: [
           { type: "KEYWORD", value: "if" }, WhiteSpace, { type: "IDENTIFIER", value: "temperaturaActual" }, WhiteSpace, { type: "OPERATOR_GREATER_EQUAL", value: ">=" }, WhiteSpace, { type: "NUMBER_INTEGER", value: "25" }, WhiteSpace, { type: "KEYWORD", value: "then" }, WhiteSpace, { type: "COMMENT_STAR", value: "(* Comprueba si la temperatura es igual o superior a 25 grados *)" }
         ], indentation: 1,
-        type: "DECLARATION",
+        type: "IF_STATEMENT",
         structuralType: "CODE_EXECUTION"
       },
       {
@@ -187,7 +187,7 @@ describe("formatPascalCode", () => {
         tokens: [
           { type: "IDENTIFIER", value: "writeln" }, { type: "DELIMITER_LPAREN", value: "(" }, { type: "STRING_LITERAL", value: "¡Hace calor! Enciende el aire acondicionado." }, { type: "DELIMITER_RPAREN", value: ")" }, DELIMITER_SEMICOLON, WhiteSpace, { type: "COMMENT_STAR", value: "(* Acción si hace calor *)" }
         ], indentation: 2,
-        type: "DECLARATION",
+        type: "UNKNOWN",
         structuralType: "CODE_EXECUTION"
       },
       {

@@ -7,7 +7,7 @@ const isComment = (token: PascalToken): boolean => {
 };
 
 const isOperator = (token: PascalToken): boolean => {
-  return ["OPERATOR_EQUAL", "OPERATOR_ASSIGN", "OPERATOR_GREATER", "OPERATOR_LESS"].includes(token?.type);
+  return ["OPERATOR_EQUAL", "OPERATOR_ASSIGN", "OPERATOR_GREATER", "OPERATOR_LESS", "OPERATOR_NOT_EQUAL", "OPERATOR_GREATER_EQUAL", "OPERATOR_LESS_EQUAL"].includes(token?.type);
 };
 
 const isStatement = (type: LineType): boolean => {
@@ -38,31 +38,43 @@ const isEndOfLine = (currentToken: PascalToken, nextToken: PascalToken): boolean
 }
 
 const needWhiteSpace = (currentToken: PascalToken, nextToken: PascalToken) => {
-  let needWhiteSpace = false;
+  if (!nextToken) {
+    return false;
+  }
 
-  //whitespace evaluator
+  if (nextToken.type === "KEYWORD" && nextToken.value === "then") {
+    return true;
+  }
+
   if (currentToken.type === "KEYWORD") {
     if (currentToken.value === "program") {
-      needWhiteSpace = true;
+      return true;
+    }
+    if (currentToken.value === "if") {
+      return true;
     }
   }
   if (currentToken.type === "IDENTIFIER" && isOperator(nextToken)) {
-    needWhiteSpace = true;
+    return true;
   }
 
   if (currentToken.type === "OPERATOR_ASSIGN") {
-    needWhiteSpace = true;
+    return true;
   }
 
   if (currentToken.type === "DELIMITER_COLON" && nextToken.type !== "OPERATOR_EQUAL") {
-    needWhiteSpace = true;
+    return true;
+  }
+
+  if (isOperator(currentToken)) {
+    return true;
   }
 
   if (isComment(nextToken)) {
-    needWhiteSpace = true;
+    return true;
   }
 
-  return needWhiteSpace;
+  return false;
 }
 
 const LineToStructure: Partial<Record<LineType, StructuralType>> = {
