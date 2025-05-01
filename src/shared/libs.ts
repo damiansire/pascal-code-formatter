@@ -15,25 +15,32 @@ const isStatement = (type: LineType): boolean => {
 };
 
 const isEndOfLine = (currentToken: PascalToken, nextToken: PascalToken): boolean => {
-  if (!isComment(nextToken)) {
-    if (isComment(currentToken)) {
+  if (isComment(nextToken)) {
+    return false;
+  }
+  if (isComment(currentToken)) {
+    return true;
+  }
+
+  if (currentToken.type === "DELIMITER_SEMICOLON") {
+    return true;
+  }
+  if (currentToken.type === "KEYWORD") {
+    if (["begin", "var", "else"].includes(currentToken.value)) {
       return true;
     }
-    if (currentToken.type === "DELIMITER_SEMICOLON") {
-      return true;
-    }
-    if (currentToken.type === "KEYWORD") {
-      if (["begin", "var"].includes(currentToken.value)) {
-        return true;
-      }
-    }
-    if (nextToken === undefined) {
-      return true;
-    }
-    if (nextToken.type === "EOF") {
+
+    if (currentToken.value === "end" && nextToken.value !== ".") {
       return true;
     }
   }
+  if (nextToken === undefined) {
+    return true;
+  }
+  if (nextToken.type === "EOF") {
+    return true;
+  }
+
   return false;
 }
 
