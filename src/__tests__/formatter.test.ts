@@ -163,7 +163,7 @@ end.`;
         { type: "OPERATOR_GREATER_EQUAL", value: ">=" },
         WhiteSpace,
         { type: "NUMBER_INTEGER", value: "25" },
-      ], { indent: 1, comment: "Comprueba si la temperatura es igual o superior a 25 grados" }),
+      ], { indent: 1, comment: "Comprueba si la temperatura es igual o superior a 25 grados", structuralType: "CODE_EXECUTION" }),
       createBeginLine({ indent: 1 }),
       createWritelnLine("'¡Hace calor! Enciende el aire acondicionado.'", { indent: 2, comment: "Acción si hace calor" }),
       createEndLine({ indent: 1 }),
@@ -181,7 +181,6 @@ end.`;
   });
 
 });
-/*
 
 describe("one line test", () => {
   const input = `if temperaturaActual > 25 then (* Comprueba si la temperatura supera los 25 grados *) begin writeln('¡Hace calor! Enciende el aire acondicionado.'); (* Acción si hace calor *) end else begin writeln('Temperatura agradable. Aire acondicionado apagado'); (* Acción si no hace calor *) end.`
@@ -195,8 +194,7 @@ describe("one line test", () => {
         { type: "OPERATOR_GREATER", value: ">" },
         WhiteSpace,
         { type: "NUMBER_INTEGER", value: "25" },
-      ], { indent: 0, comment: "Comprueba si la temperatura supera los 25 grados" })
+      ], { indent: 0, comment: "Comprueba si la temperatura supera los 25 grados", structuralType: "UNKNOWN" })
     );
   })
 })
-  */

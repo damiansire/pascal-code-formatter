@@ -52,7 +52,7 @@ const createEndLine = (options: { indent: number, withDot?: boolean } = { indent
     "CODE_EXECUTION"
 );
 
-const createWritelnLine = (message: string, options: { indent: number, comment?: string } = { indent: 1 }): FormattedPascalLine => createFormattedLine(
+const createWritelnLine = (message: string, options: { indent: number, comment?: string, structuralType?: StructuralType } = { indent: 1 }): FormattedPascalLine => createFormattedLine(
     [
         { type: "IDENTIFIER" as TokenType, value: "writeln" },
         { type: "DELIMITER_LPAREN" as TokenType, value: "(" },
@@ -63,10 +63,10 @@ const createWritelnLine = (message: string, options: { indent: number, comment?:
     ],
     options.indent,
     "UNKNOWN",
-    "CODE_EXECUTION"
+    options.structuralType || "CODE_EXECUTION",
 );
 
-const createIfStatementLine = (conditions: PascalToken[], options: { indent: number, comment?: string } = { indent: 1 }): FormattedPascalLine => createFormattedLine(
+const createIfStatementLine = (conditions: PascalToken[], options: { indent: number, comment?: string, structuralType?: StructuralType } = { indent: 1 }): FormattedPascalLine => createFormattedLine(
     [
         { type: "KEYWORD" as TokenType, value: "if" },
         WhiteSpace,
@@ -77,7 +77,7 @@ const createIfStatementLine = (conditions: PascalToken[], options: { indent: num
     ],
     options.indent,
     "IF_STATEMENT",
-    "CODE_EXECUTION"
+    options.structuralType || "CODE_EXECUTION"
 );
 
 const createElseStatementLine = (options: { indent: number } = { indent: 1 }): FormattedPascalLine => createFormattedLine(
