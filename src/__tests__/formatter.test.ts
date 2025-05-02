@@ -1,91 +1,8 @@
 import { formatPascalCode } from "../formatter";
 import { FormattedPascalLine, LineType, StructuralType } from "../shared/types";
 import { WhiteSpace, EmptyLine, VAR, PROGRAM, DELIMITER_SEMICOLON, DELIMITER_COLON, KEYWORD_INTEGER, KEYWORD_BEGIN } from "../shared/elements";
+import { program, varDecl, varDef, begin, end, writeln, ifStatement, elseStatement, line } from "./test-helpers";
 
-// Helper functions to make tests more readable
-const line = (tokens: any[], indentation: number, type: LineType, structuralType: StructuralType): FormattedPascalLine => ({
-  tokens,
-  indentation,
-  type,
-  structuralType
-});
-
-const program = (name: string) => line(
-  [PROGRAM, WhiteSpace, { type: "IDENTIFIER", value: name }, DELIMITER_SEMICOLON],
-  0,
-  "PROGRAM_NAME_DECLARATION",
-  "PROGRAM_NAME_DECLARATION"
-);
-
-const varDecl = () => line(
-  [VAR],
-  0,
-  "VAR_DECLARATION",
-  "VARS_DECLARATION"
-);
-
-const varDef = (name: string) => line(
-  [{ type: "IDENTIFIER", value: name }, DELIMITER_COLON, WhiteSpace, KEYWORD_INTEGER, DELIMITER_SEMICOLON],
-  1,
-  "DECLARATION",
-  "VARS_DECLARATION"
-);
-
-const begin = (indent: number = 0) => line(
-  [KEYWORD_BEGIN],
-  indent,
-  "BEGIN_DECLARATION",
-  "CODE_EXECUTION"
-);
-
-const end = (indent: number = 0, withDot: boolean = false) => line(
-  [
-    { type: "KEYWORD", value: "end" },
-    ...(withDot ? [{ type: "DELIMITER_DOT", value: "." }] : [])
-  ],
-  indent,
-  "END_DECLARATION",
-  "CODE_EXECUTION"
-);
-
-const writeln = (message: string, comment?: string, indent: number = 1) => line(
-  [
-    { type: "IDENTIFIER", value: "writeln" },
-    { type: "DELIMITER_LPAREN", value: "(" },
-    { type: "STRING_LITERAL", value: message },
-    { type: "DELIMITER_RPAREN", value: ")" },
-    DELIMITER_SEMICOLON,
-    ...(comment ? [WhiteSpace, { type: "COMMENT_STAR", value: `(* ${comment} *)` }] : [])
-  ],
-  indent,
-  "UNKNOWN",
-  "CODE_EXECUTION"
-);
-
-const ifStatement = (condition: string, comment?: string) => line(
-  [
-    { type: "KEYWORD", value: "if" },
-    WhiteSpace,
-    { type: "IDENTIFIER", value: "temperaturaActual" },
-    WhiteSpace,
-    { type: "OPERATOR_GREATER_EQUAL", value: ">=" },
-    WhiteSpace,
-    { type: "NUMBER_INTEGER", value: "25" },
-    WhiteSpace,
-    { type: "KEYWORD", value: "then" },
-    ...(comment ? [WhiteSpace, { type: "COMMENT_STAR", value: `(* ${comment} *)` }] : [])
-  ],
-  1,
-  "IF_STATEMENT",
-  "CODE_EXECUTION"
-);
-
-const elseStatement = () => line(
-  [{ type: "KEYWORD", value: "else" }],
-  1,
-  "UNKNOWN",
-  "CODE_EXECUTION"
-);
 
 describe("Simple Cases", () => {
   test("should handle basic string in writeln", () => {
@@ -97,7 +14,7 @@ describe("Simple Cases", () => {
       writeln("'Hello, world!'"),
       end(0, true)
     ];
-    expect(formatPascalCode(input, { ignoreEOF: true })).toEqual(expected);
+    expect(formatPascalCode(input)).toEqual(expected);
   });
 
   test("should handle escaped single quotes in strings", () => {
@@ -109,7 +26,7 @@ describe("Simple Cases", () => {
       writeln("'It''s a beautiful day'"),
       end(0, true)
     ];
-    expect(formatPascalCode(input, { ignoreEOF: true })).toEqual(expected);
+    expect(formatPascalCode(input)).toEqual(expected);
   });
 
   test("should handle multiple writeln statements with escaped quotes", () => {
@@ -128,7 +45,7 @@ describe("Simple Cases", () => {
       writeln("'String with multiple ''quotes'' here'"),
       end(0, true)
     ];
-    expect(formatPascalCode(input, { ignoreEOF: true })).toEqual(expected);
+    expect(formatPascalCode(input)).toEqual(expected);
   });
 
   test("should handle empty strings", () => {
@@ -140,7 +57,7 @@ describe("Simple Cases", () => {
       writeln("''"),
       end(0, true)
     ];
-    expect(formatPascalCode(input, { ignoreEOF: true })).toEqual(expected);
+    expect(formatPascalCode(input)).toEqual(expected);
   });
 
   test("should handle strings with only escaped quotes", () => {
@@ -152,7 +69,7 @@ describe("Simple Cases", () => {
       writeln("''''"),
       end(0, true)
     ];
-    expect(formatPascalCode(input, { ignoreEOF: true })).toEqual(expected);
+    expect(formatPascalCode(input)).toEqual(expected);
   });
 
   test("should handle strings with multiple escaped quotes", () => {
@@ -164,7 +81,7 @@ describe("Simple Cases", () => {
       writeln("''''''''"),
       end(0, true)
     ];
-    expect(formatPascalCode(input, { ignoreEOF: true })).toEqual(expected);
+    expect(formatPascalCode(input)).toEqual(expected);
   });
 })
 
@@ -181,7 +98,7 @@ describe("formatPascalCode", () => {
       begin(),
       end(0, true)
     ];
-    expect(formatPascalCode(input, { ignoreEOF: true })).toEqual(expected);
+    expect(formatPascalCode(input)).toEqual(expected);
   });
 
   test("should format a simple Hello World program with comments", () => {
@@ -203,7 +120,7 @@ describe("formatPascalCode", () => {
         "CODE_EXECUTION"
       )
     ];
-    expect(formatPascalCode(input, { ignoreEOF: true })).toEqual(expected);
+    expect(formatPascalCode(input)).toEqual(expected);
   });
 
   test("should format if-then-else with comments", () => {
@@ -254,6 +171,18 @@ end.`;
         ], 1, "END_DECLARATION", "CODE_EXECUTION"),
       end(0, true)
     ];
-    expect(formatPascalCode(input, { ignoreEOF: true })).toEqual(expected);
+    expect(formatPascalCode(input)).toEqual(expected);
   });
+
 });
+
+describe("one line test", () => {
+  const input = `if temperaturaActual > 25 (* Comprueba si la temperatura supera los 25 grados *) then begin writeln('¡Hace calor! Enciende el aire acondicionado.'); (* Acción si hace calor *) end else begin writeln('Temperatura agradable. Aire acondicionado apagado'); (* Acción si no hace calor *) end.`
+  const result = formatPascalCode(input);
+
+  test("first line is only condition", () => {
+    expect(result[0]).toEqual(
+      ifStatement("temperaturaActual > 25", "Comprueba si la temperatura supera los 25 grados")
+    );
+  })
+})
