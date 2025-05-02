@@ -87,6 +87,87 @@ const elseStatement = () => line(
   "CODE_EXECUTION"
 );
 
+describe("Simple Cases", () => {
+  test("should handle basic string in writeln", () => {
+    const input = "program Test; begin writeln('Hello, world!'); end.";
+    const expected: FormattedPascalLine[] = [
+      program("Test"),
+      EmptyLine,
+      begin(),
+      writeln("Hello, world!"),
+      end(0, true)
+    ];
+    expect(formatPascalCode(input, { ignoreEOF: true })).toEqual(expected);
+  });
+
+  test("should handle escaped single quotes in strings", () => {
+    const input = "program Test; begin writeln('It''s a beautiful day'); end.";
+    const expected: FormattedPascalLine[] = [
+      program("Test"),
+      EmptyLine,
+      begin(),
+      writeln("It's a beautiful day"),
+      end(0, true)
+    ];
+    expect(formatPascalCode(input, { ignoreEOF: true })).toEqual(expected);
+  });
+
+  test("should handle multiple writeln statements with escaped quotes", () => {
+    const input = `program Test; 
+    begin 
+      writeln('Simple string');
+      writeln('String with ''escaped'' quotes');
+      writeln('String with multiple ''quotes'' here');
+    end.`;
+    const expected: FormattedPascalLine[] = [
+      program("Test"),
+      EmptyLine,
+      begin(),
+      writeln("Simple string"),
+      writeln("String with 'escaped' quotes"),
+      writeln("String with multiple 'quotes' here"),
+      end(0, true)
+    ];
+    expect(formatPascalCode(input, { ignoreEOF: true })).toEqual(expected);
+  });
+
+  test("should handle empty strings", () => {
+    const input = "program Test; begin writeln(''); end.";
+    const expected: FormattedPascalLine[] = [
+      program("Test"),
+      EmptyLine,
+      begin(),
+      writeln(""),
+      end(0, true)
+    ];
+    expect(formatPascalCode(input, { ignoreEOF: true })).toEqual(expected);
+  });
+
+  test("should handle strings with only escaped quotes", () => {
+    const input = "program Test; begin writeln(''''); end.";
+    const expected: FormattedPascalLine[] = [
+      program("Test"),
+      EmptyLine,
+      begin(),
+      writeln("'"),
+      end(0, true)
+    ];
+    expect(formatPascalCode(input, { ignoreEOF: true })).toEqual(expected);
+  });
+
+  test("should handle strings with multiple escaped quotes", () => {
+    const input = "program Test; begin writeln(''''''''); end.";
+    const expected: FormattedPascalLine[] = [
+      program("Test"),
+      EmptyLine,
+      begin(),
+      writeln("'''"),
+      end(0, true)
+    ];
+    expect(formatPascalCode(input, { ignoreEOF: true })).toEqual(expected);
+  });
+})
+
 describe("formatPascalCode", () => {
   test("should return correct result for simple program", () => {
     const input = "program Test; var x: integer; y: integer; begin end.";

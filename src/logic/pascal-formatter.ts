@@ -41,8 +41,6 @@ class PascalFormatter {
       this.addToFormattedLine(currentLine)
     }
 
-
-
     return this.cleanFormattedLines;
   }
 
