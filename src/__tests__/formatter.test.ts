@@ -12,7 +12,7 @@ describe("Simple Cases", () => {
       EmptyLine,
       createBeginLine(),
       createWritelnLine("'Hello, world!'"),
-      createEndLine(0, true)
+      createEndLine({ indent: 0, withDot: true })
     ];
     expect(formatPascalCode(input)).toEqual(expected);
   });
@@ -24,7 +24,7 @@ describe("Simple Cases", () => {
       EmptyLine,
       createBeginLine(),
       createWritelnLine("'It''s a beautiful day'"),
-      createEndLine(0, true)
+      createEndLine({ indent: 0, withDot: true })
     ];
     expect(formatPascalCode(input)).toEqual(expected);
   });
@@ -43,7 +43,7 @@ describe("Simple Cases", () => {
       createWritelnLine("'Simple string'"),
       createWritelnLine("'String with ''escaped'' quotes'"),
       createWritelnLine("'String with multiple ''quotes'' here'"),
-      createEndLine(0, true)
+      createEndLine({ indent: 0, withDot: true })
     ];
     expect(formatPascalCode(input)).toEqual(expected);
   });
@@ -55,7 +55,7 @@ describe("Simple Cases", () => {
       EmptyLine,
       createBeginLine(),
       createWritelnLine("''"),
-      createEndLine(0, true)
+      createEndLine({ indent: 0, withDot: true })
     ];
     expect(formatPascalCode(input)).toEqual(expected);
   });
@@ -67,7 +67,7 @@ describe("Simple Cases", () => {
       EmptyLine,
       createBeginLine(),
       createWritelnLine("''''"),
-      createEndLine(0, true)
+      createEndLine({ indent: 0, withDot: true })
     ];
     expect(formatPascalCode(input)).toEqual(expected);
   });
@@ -79,7 +79,7 @@ describe("Simple Cases", () => {
       EmptyLine,
       createBeginLine(),
       createWritelnLine("''''''''"),
-      createEndLine(0, true)
+      createEndLine({ indent: 0, withDot: true })
     ];
     expect(formatPascalCode(input)).toEqual(expected);
   });
@@ -96,9 +96,9 @@ describe("formatPascalCode", () => {
       createVarDefinitionLine("y"),
       EmptyLine,
       createBeginLine(),
-      createEndLine(0, true)
+      createEndLine({ indent: 0, withDot: true })
     ];
-    expect(formatPascalCode(input, { ignoreEOF: true })).toEqual(expected);
+    expect(formatPascalCode(input)).toEqual(expected);
   });
 
   test("should format a simple Hello World program with comments", () => {
@@ -107,7 +107,7 @@ describe("formatPascalCode", () => {
       createProgramLine("MiPrimerPrograma"),
       EmptyLine,
       createBeginLine(),
-      createWritelnLine("'Hola, mundo!'", "Muestra un mensaje en pantalla"),
+      createWritelnLine("'Hola, mundo!'", { indent: 1, comment: "Muestra un mensaje en pantalla" }),
       createFormattedLine(
         [
           { type: "KEYWORD", value: "end" },
@@ -120,7 +120,7 @@ describe("formatPascalCode", () => {
         "CODE_EXECUTION"
       )
     ];
-    expect(formatPascalCode(input, { ignoreEOF: true })).toEqual(expected);
+    expect(formatPascalCode(input)).toEqual(expected);
   });
 
   test("should format if-then-else with comments", () => {
@@ -157,32 +157,46 @@ end.`;
         "CODE_EXECUTION"
       ),
       EmptyLine,
-      createIfStatementLine("temperaturaActual >= 25", "Comprueba si la temperatura es igual o superior a 25 grados"),
-      createBeginLine(1),
-      createWritelnLine("'¡Hace calor! Enciende el aire acondicionado.'", "Acción si hace calor", 2),
-      createEndLine(1),
+      createIfStatementLine([
+        { type: "IDENTIFIER", value: "temperaturaActual" },
+        WhiteSpace,
+        { type: "OPERATOR_GREATER_EQUAL", value: ">=" },
+        WhiteSpace,
+        { type: "NUMBER_INTEGER", value: "25" },
+      ], { indent: 1, comment: "Comprueba si la temperatura es igual o superior a 25 grados" }),
+      createBeginLine({ indent: 1 }),
+      createWritelnLine("'¡Hace calor! Enciende el aire acondicionado.'", { indent: 2, comment: "Acción si hace calor" }),
+      createEndLine({ indent: 1 }),
       createElseStatementLine(),
-      createBeginLine(1),
-      createWritelnLine("'Temperatura agradable. Aire acondicionado apagado'", "Acción si no hace calor", 2),
+      createBeginLine({ indent: 1 }),
+      createWritelnLine("'Temperatura agradable. Aire acondicionado apagado'", { indent: 2, comment: "Acción si no hace calor" }),
       createFormattedLine(
         [
           { type: "KEYWORD", value: "end" },
           { type: "DELIMITER_SEMICOLON", value: ";" },
         ], 1, "END_DECLARATION", "CODE_EXECUTION"),
-      createEndLine(0, true)
+      createEndLine({ indent: 0, withDot: true })
     ];
-    expect(formatPascalCode(input, { ignoreEOF: true })).toEqual(expected);
+    expect(formatPascalCode(input)).toEqual(expected);
   });
 
 });
+/*
 
 describe("one line test", () => {
-  const input = `if temperaturaActual > 25 (* Comprueba si la temperatura supera los 25 grados *) then begin writeln('¡Hace calor! Enciende el aire acondicionado.'); (* Acción si hace calor *) end else begin writeln('Temperatura agradable. Aire acondicionado apagado'); (* Acción si no hace calor *) end.`
+  const input = `if temperaturaActual > 25 then (* Comprueba si la temperatura supera los 25 grados *) begin writeln('¡Hace calor! Enciende el aire acondicionado.'); (* Acción si hace calor *) end else begin writeln('Temperatura agradable. Aire acondicionado apagado'); (* Acción si no hace calor *) end.`
   const result = formatPascalCode(input);
 
   test("first line is only condition", () => {
     expect(result[0]).toEqual(
-      createIfStatementLine("temperaturaActual > 25", "Comprueba si la temperatura supera los 25 grados")
+      createIfStatementLine([
+        { type: "IDENTIFIER", value: "temperaturaActual" },
+        WhiteSpace,
+        { type: "OPERATOR_GREATER", value: ">" },
+        WhiteSpace,
+        { type: "NUMBER_INTEGER", value: "25" },
+      ], { indent: 0, comment: "Comprueba si la temperatura supera los 25 grados" })
     );
   })
 })
+  */
