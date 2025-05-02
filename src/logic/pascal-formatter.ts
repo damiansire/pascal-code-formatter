@@ -1,7 +1,7 @@
 import { tokenizePascal } from "pascal-tokenizer";
 import { FormatPascalCodeOptions, FormattedPascalLine, InternalFormattedPascalLine, StructuralType } from "../shared/types";
 import { FormatterController } from "./formatter.controller";
-import { getLineType, getStructuralType, needAddEmptyLine } from "../shared/libs";
+import { cleanTokens, getLineType, getStructuralType, needAddEmptyLine } from "../shared/libs";
 import { CounterweightStack } from "counterweight-stack";
 import { EmptyLine, StructuralElementsWeightRules } from "../shared/elements";
 class PascalFormatter {
@@ -16,7 +16,8 @@ class PascalFormatter {
     if (this.options.ignoreEOF) {
       tokens = tokens.filter(x => x.type !== "EOF")
     }
-    this.formatterController = new FormatterController(tokens);
+    let cleanedTokens = cleanTokens(tokens)
+    this.formatterController = new FormatterController(cleanedTokens);
     this.stackHistory = new CounterweightStack(StructuralElementsWeightRules);
   }
 

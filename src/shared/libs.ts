@@ -172,4 +172,19 @@ const needAddEmptyLine = (history: CounterweightStack<StructuralType>, prevLine:
   return false;
 }
 
-export { isComment, isOperator, isEndOfLine, needWhiteSpace, getLineType, getStructuralType, needAddEmptyLine };
+const cleanToken = (token: PascalToken) => {
+  if (token.type === "STRING_LITERAL") {
+    const value = token.value.replace(/'/g, "''")
+    return {
+      ...token,
+      value: `'${value}'`
+    }
+  }
+  return token;
+}
+
+const cleanTokens = (tokens: PascalToken[]): PascalToken[] => {
+  return tokens.map(cleanToken);
+}
+
+export { isComment, isOperator, isEndOfLine, needWhiteSpace, getLineType, getStructuralType, needAddEmptyLine, cleanTokens };

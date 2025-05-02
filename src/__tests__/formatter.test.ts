@@ -94,7 +94,7 @@ describe("Simple Cases", () => {
       program("Test"),
       EmptyLine,
       begin(),
-      writeln("Hello, world!"),
+      writeln("'Hello, world!'"),
       end(0, true)
     ];
     expect(formatPascalCode(input, { ignoreEOF: true })).toEqual(expected);
@@ -106,7 +106,7 @@ describe("Simple Cases", () => {
       program("Test"),
       EmptyLine,
       begin(),
-      writeln("It's a beautiful day"),
+      writeln("'It''s a beautiful day'"),
       end(0, true)
     ];
     expect(formatPascalCode(input, { ignoreEOF: true })).toEqual(expected);
@@ -123,9 +123,9 @@ describe("Simple Cases", () => {
       program("Test"),
       EmptyLine,
       begin(),
-      writeln("Simple string"),
-      writeln("String with 'escaped' quotes"),
-      writeln("String with multiple 'quotes' here"),
+      writeln("'Simple string'"),
+      writeln("'String with ''escaped'' quotes'"),
+      writeln("'String with multiple ''quotes'' here'"),
       end(0, true)
     ];
     expect(formatPascalCode(input, { ignoreEOF: true })).toEqual(expected);
@@ -137,7 +137,7 @@ describe("Simple Cases", () => {
       program("Test"),
       EmptyLine,
       begin(),
-      writeln(""),
+      writeln("''"),
       end(0, true)
     ];
     expect(formatPascalCode(input, { ignoreEOF: true })).toEqual(expected);
@@ -149,7 +149,7 @@ describe("Simple Cases", () => {
       program("Test"),
       EmptyLine,
       begin(),
-      writeln("'"),
+      writeln("''''"),
       end(0, true)
     ];
     expect(formatPascalCode(input, { ignoreEOF: true })).toEqual(expected);
@@ -161,7 +161,7 @@ describe("Simple Cases", () => {
       program("Test"),
       EmptyLine,
       begin(),
-      writeln("'''"),
+      writeln("''''''''"),
       end(0, true)
     ];
     expect(formatPascalCode(input, { ignoreEOF: true })).toEqual(expected);
@@ -190,7 +190,7 @@ describe("formatPascalCode", () => {
       program("MiPrimerPrograma"),
       EmptyLine,
       begin(),
-      writeln("Hola, mundo!", "Muestra un mensaje en pantalla"),
+      writeln("'Hola, mundo!'", "Muestra un mensaje en pantalla"),
       line(
         [
           { type: "KEYWORD", value: "end" },
@@ -242,11 +242,11 @@ end.`;
       EmptyLine,
       ifStatement("temperaturaActual >= 25", "Comprueba si la temperatura es igual o superior a 25 grados"),
       begin(1),
-      writeln("¡Hace calor! Enciende el aire acondicionado.", "Acción si hace calor", 2),
+      writeln("'¡Hace calor! Enciende el aire acondicionado.'", "Acción si hace calor", 2),
       end(1),
       elseStatement(),
       begin(1),
-      writeln("Temperatura agradable. Aire acondicionado apagado", "Acción si no hace calor", 2),
+      writeln("'Temperatura agradable. Aire acondicionado apagado'", "Acción si no hace calor", 2),
       line(
         [
           { type: "KEYWORD", value: "end" },
