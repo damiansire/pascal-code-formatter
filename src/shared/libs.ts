@@ -105,7 +105,7 @@ const getStructuralType = (lineType: LineType, typeStack: CounterweightStack<Str
   if (lineType === "END_DECLARATION") {
     return "CODE_EXECUTION"
   }
-  return typeStack.peek() || "UNKNOWN";
+  return typeStack.peek() || "CODE_EXECUTION";
 }
 
 const getLineType = (tokens: PascalToken[]): LineType => {

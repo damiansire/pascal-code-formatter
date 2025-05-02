@@ -194,7 +194,11 @@ describe("one line test", () => {
         { type: "OPERATOR_GREATER", value: ">" },
         WhiteSpace,
         { type: "NUMBER_INTEGER", value: "25" },
-      ], { indent: 0, comment: "Comprueba si la temperatura supera los 25 grados", structuralType: "UNKNOWN" })
+      ], { indent: 0, comment: "Comprueba si la temperatura supera los 25 grados", structuralType: "CODE_EXECUTION" })
     );
+  })
+
+  test("the second line is begin", () => {
+    expect(result[1]).toEqual(createBeginLine());
   })
 })
