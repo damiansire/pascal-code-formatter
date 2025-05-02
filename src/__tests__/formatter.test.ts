@@ -1,18 +1,18 @@
 import { formatPascalCode } from "../formatter";
 import { FormattedPascalLine, LineType, StructuralType } from "../shared/types";
 import { WhiteSpace, EmptyLine, VAR, PROGRAM, DELIMITER_SEMICOLON, DELIMITER_COLON, KEYWORD_INTEGER, KEYWORD_BEGIN } from "../shared/elements";
-import { program, varDecl, varDef, begin, end, writeln, ifStatement, elseStatement, line } from "./test-helpers";
+import { createProgramLine, createVarDeclarationLine, createVarDefinitionLine, createBeginLine, createEndLine, createWritelnLine, createIfStatementLine, createElseStatementLine, createFormattedLine } from "./test-helpers";
 
 
 describe("Simple Cases", () => {
   test("should handle basic string in writeln", () => {
     const input = "program Test; begin writeln('Hello, world!'); end.";
     const expected: FormattedPascalLine[] = [
-      program("Test"),
+      createProgramLine("Test"),
       EmptyLine,
-      begin(),
-      writeln("'Hello, world!'"),
-      end(0, true)
+      createBeginLine(),
+      createWritelnLine("'Hello, world!'"),
+      createEndLine(0, true)
     ];
     expect(formatPascalCode(input)).toEqual(expected);
   });
@@ -20,11 +20,11 @@ describe("Simple Cases", () => {
   test("should handle escaped single quotes in strings", () => {
     const input = "program Test; begin writeln('It''s a beautiful day'); end.";
     const expected: FormattedPascalLine[] = [
-      program("Test"),
+      createProgramLine("Test"),
       EmptyLine,
-      begin(),
-      writeln("'It''s a beautiful day'"),
-      end(0, true)
+      createBeginLine(),
+      createWritelnLine("'It''s a beautiful day'"),
+      createEndLine(0, true)
     ];
     expect(formatPascalCode(input)).toEqual(expected);
   });
@@ -37,13 +37,13 @@ describe("Simple Cases", () => {
       writeln('String with multiple ''quotes'' here');
     end.`;
     const expected: FormattedPascalLine[] = [
-      program("Test"),
+      createProgramLine("Test"),
       EmptyLine,
-      begin(),
-      writeln("'Simple string'"),
-      writeln("'String with ''escaped'' quotes'"),
-      writeln("'String with multiple ''quotes'' here'"),
-      end(0, true)
+      createBeginLine(),
+      createWritelnLine("'Simple string'"),
+      createWritelnLine("'String with ''escaped'' quotes'"),
+      createWritelnLine("'String with multiple ''quotes'' here'"),
+      createEndLine(0, true)
     ];
     expect(formatPascalCode(input)).toEqual(expected);
   });
@@ -51,11 +51,11 @@ describe("Simple Cases", () => {
   test("should handle empty strings", () => {
     const input = "program Test; begin writeln(''); end.";
     const expected: FormattedPascalLine[] = [
-      program("Test"),
+      createProgramLine("Test"),
       EmptyLine,
-      begin(),
-      writeln("''"),
-      end(0, true)
+      createBeginLine(),
+      createWritelnLine("''"),
+      createEndLine(0, true)
     ];
     expect(formatPascalCode(input)).toEqual(expected);
   });
@@ -63,11 +63,11 @@ describe("Simple Cases", () => {
   test("should handle strings with only escaped quotes", () => {
     const input = "program Test; begin writeln(''''); end.";
     const expected: FormattedPascalLine[] = [
-      program("Test"),
+      createProgramLine("Test"),
       EmptyLine,
-      begin(),
-      writeln("''''"),
-      end(0, true)
+      createBeginLine(),
+      createWritelnLine("''''"),
+      createEndLine(0, true)
     ];
     expect(formatPascalCode(input)).toEqual(expected);
   });
@@ -75,11 +75,11 @@ describe("Simple Cases", () => {
   test("should handle strings with multiple escaped quotes", () => {
     const input = "program Test; begin writeln(''''''''); end.";
     const expected: FormattedPascalLine[] = [
-      program("Test"),
+      createProgramLine("Test"),
       EmptyLine,
-      begin(),
-      writeln("''''''''"),
-      end(0, true)
+      createBeginLine(),
+      createWritelnLine("''''''''"),
+      createEndLine(0, true)
     ];
     expect(formatPascalCode(input)).toEqual(expected);
   });
@@ -89,26 +89,26 @@ describe("formatPascalCode", () => {
   test("should return correct result for simple program", () => {
     const input = "program Test; var x: integer; y: integer; begin end.";
     const expected: FormattedPascalLine[] = [
-      program("Test"),
+      createProgramLine("Test"),
       EmptyLine,
-      varDecl(),
-      varDef("x"),
-      varDef("y"),
+      createVarDeclarationLine(),
+      createVarDefinitionLine("x"),
+      createVarDefinitionLine("y"),
       EmptyLine,
-      begin(),
-      end(0, true)
+      createBeginLine(),
+      createEndLine(0, true)
     ];
-    expect(formatPascalCode(input)).toEqual(expected);
+    expect(formatPascalCode(input, { ignoreEOF: true })).toEqual(expected);
   });
 
   test("should format a simple Hello World program with comments", () => {
     const input = "program MiPrimerPrograma;begin writeln('Hola, mundo!'); (* Muestra un mensaje en pantalla *) end. (* El punto final es crucial! *)";
     const expected: FormattedPascalLine[] = [
-      program("MiPrimerPrograma"),
+      createProgramLine("MiPrimerPrograma"),
       EmptyLine,
-      begin(),
-      writeln("'Hola, mundo!'", "Muestra un mensaje en pantalla"),
-      line(
+      createBeginLine(),
+      createWritelnLine("'Hola, mundo!'", "Muestra un mensaje en pantalla"),
+      createFormattedLine(
         [
           { type: "KEYWORD", value: "end" },
           { type: "DELIMITER_DOT", value: "." },
@@ -120,7 +120,7 @@ describe("formatPascalCode", () => {
         "CODE_EXECUTION"
       )
     ];
-    expect(formatPascalCode(input)).toEqual(expected);
+    expect(formatPascalCode(input, { ignoreEOF: true })).toEqual(expected);
   });
 
   test("should format if-then-else with comments", () => {
@@ -137,13 +137,13 @@ begin
 end.`;
 
     const expected: FormattedPascalLine[] = [
-      program("TestIfElse"),
+      createProgramLine("TestIfElse"),
       EmptyLine,
-      varDecl(),
-      varDef("temperaturaActual"),
+      createVarDeclarationLine(),
+      createVarDefinitionLine("temperaturaActual"),
       EmptyLine,
-      begin(),
-      line(
+      createBeginLine(),
+      createFormattedLine(
         [
           { type: "IDENTIFIER", value: "temperaturaActual" },
           WhiteSpace,
@@ -157,21 +157,21 @@ end.`;
         "CODE_EXECUTION"
       ),
       EmptyLine,
-      ifStatement("temperaturaActual >= 25", "Comprueba si la temperatura es igual o superior a 25 grados"),
-      begin(1),
-      writeln("'¡Hace calor! Enciende el aire acondicionado.'", "Acción si hace calor", 2),
-      end(1),
-      elseStatement(),
-      begin(1),
-      writeln("'Temperatura agradable. Aire acondicionado apagado'", "Acción si no hace calor", 2),
-      line(
+      createIfStatementLine("temperaturaActual >= 25", "Comprueba si la temperatura es igual o superior a 25 grados"),
+      createBeginLine(1),
+      createWritelnLine("'¡Hace calor! Enciende el aire acondicionado.'", "Acción si hace calor", 2),
+      createEndLine(1),
+      createElseStatementLine(),
+      createBeginLine(1),
+      createWritelnLine("'Temperatura agradable. Aire acondicionado apagado'", "Acción si no hace calor", 2),
+      createFormattedLine(
         [
           { type: "KEYWORD", value: "end" },
           { type: "DELIMITER_SEMICOLON", value: ";" },
         ], 1, "END_DECLARATION", "CODE_EXECUTION"),
-      end(0, true)
+      createEndLine(0, true)
     ];
-    expect(formatPascalCode(input)).toEqual(expected);
+    expect(formatPascalCode(input, { ignoreEOF: true })).toEqual(expected);
   });
 
 });
@@ -182,7 +182,7 @@ describe("one line test", () => {
 
   test("first line is only condition", () => {
     expect(result[0]).toEqual(
-      ifStatement("temperaturaActual > 25", "Comprueba si la temperatura supera los 25 grados")
+      createIfStatementLine("temperaturaActual > 25", "Comprueba si la temperatura supera los 25 grados")
     );
   })
 })

@@ -1,89 +1,106 @@
 import { PROGRAM, WhiteSpace, DELIMITER_SEMICOLON, VAR, DELIMITER_COLON, KEYWORD_INTEGER, KEYWORD_BEGIN } from "../shared/elements";
 import { LineType, StructuralType, FormattedPascalLine } from "../shared/types";
+import { PascalToken, TokenType } from "pascal-tokenizer";
 
-// Helper functions to make tests more readable
-const line = (tokens: any[], indentation: number, type: LineType, structuralType: StructuralType): FormattedPascalLine => ({
+const createFormattedLine = (
+    tokens: PascalToken[],
+    indentation: number,
+    type: LineType,
+    structuralType: StructuralType
+): FormattedPascalLine => ({
     tokens,
     indentation,
     type,
     structuralType
 });
 
-const program = (name: string) => line(
-    [PROGRAM, WhiteSpace, { type: "IDENTIFIER", value: name }, DELIMITER_SEMICOLON],
+const createProgramLine = (name: string): FormattedPascalLine => createFormattedLine(
+    [PROGRAM, WhiteSpace, { type: "IDENTIFIER" as TokenType, value: name }, DELIMITER_SEMICOLON],
     0,
     "PROGRAM_NAME_DECLARATION",
     "PROGRAM_NAME_DECLARATION"
 );
 
-const varDecl = () => line(
+const createVarDeclarationLine = (): FormattedPascalLine => createFormattedLine(
     [VAR],
     0,
     "VAR_DECLARATION",
     "VARS_DECLARATION"
 );
 
-const varDef = (name: string) => line(
-    [{ type: "IDENTIFIER", value: name }, DELIMITER_COLON, WhiteSpace, KEYWORD_INTEGER, DELIMITER_SEMICOLON],
+const createVarDefinitionLine = (name: string): FormattedPascalLine => createFormattedLine(
+    [{ type: "IDENTIFIER" as TokenType, value: name }, DELIMITER_COLON, WhiteSpace, KEYWORD_INTEGER, DELIMITER_SEMICOLON],
     1,
     "DECLARATION",
     "VARS_DECLARATION"
 );
 
-const begin = (indent: number = 0) => line(
+const createBeginLine = (indent: number = 0): FormattedPascalLine => createFormattedLine(
     [KEYWORD_BEGIN],
     indent,
     "BEGIN_DECLARATION",
     "CODE_EXECUTION"
 );
 
-const end = (indent: number = 0, withDot: boolean = false) => line(
+const createEndLine = (indent: number = 0, withDot: boolean = false): FormattedPascalLine => createFormattedLine(
     [
-        { type: "KEYWORD", value: "end" },
-        ...(withDot ? [{ type: "DELIMITER_DOT", value: "." }] : [])
+        { type: "KEYWORD" as TokenType, value: "end" },
+        ...(withDot ? [{ type: "DELIMITER_DOT" as TokenType, value: "." }] : [])
     ],
     indent,
     "END_DECLARATION",
     "CODE_EXECUTION"
 );
 
-const writeln = (message: string, comment?: string, indent: number = 1) => line(
+const createWritelnLine = (message: string, comment?: string, indent: number = 1): FormattedPascalLine => createFormattedLine(
     [
-        { type: "IDENTIFIER", value: "writeln" },
-        { type: "DELIMITER_LPAREN", value: "(" },
-        { type: "STRING_LITERAL", value: message },
-        { type: "DELIMITER_RPAREN", value: ")" },
+        { type: "IDENTIFIER" as TokenType, value: "writeln" },
+        { type: "DELIMITER_LPAREN" as TokenType, value: "(" },
+        { type: "STRING_LITERAL" as TokenType, value: message },
+        { type: "DELIMITER_RPAREN" as TokenType, value: ")" },
         DELIMITER_SEMICOLON,
-        ...(comment ? [WhiteSpace, { type: "COMMENT_STAR", value: `(* ${comment} *)` }] : [])
+        ...(comment ? [WhiteSpace, { type: "COMMENT_STAR" as TokenType, value: `(* ${comment} *)` }] : [])
     ],
     indent,
     "UNKNOWN",
     "CODE_EXECUTION"
 );
 
-const ifStatement = (condition: string, comment?: string) => line(
+const createIfStatementLine = (condition: string, comment?: string): FormattedPascalLine => createFormattedLine(
     [
-        { type: "KEYWORD", value: "if" },
+        { type: "KEYWORD" as TokenType, value: "if" },
         WhiteSpace,
-        { type: "IDENTIFIER", value: "temperaturaActual" },
+        { type: "IDENTIFIER" as TokenType, value: "temperaturaActual" },
         WhiteSpace,
-        { type: "OPERATOR_GREATER_EQUAL", value: ">=" },
+        { type: "OPERATOR_GREATER_EQUAL" as TokenType, value: ">=" },
         WhiteSpace,
-        { type: "NUMBER_INTEGER", value: "25" },
+        { type: "NUMBER_INTEGER" as TokenType, value: "25" },
         WhiteSpace,
-        { type: "KEYWORD", value: "then" },
-        ...(comment ? [WhiteSpace, { type: "COMMENT_STAR", value: `(* ${comment} *)` }] : [])
+        { type: "KEYWORD" as TokenType, value: "then" },
+        ...(comment ? [WhiteSpace, { type: "COMMENT_STAR" as TokenType, value: `(* ${comment} *)` }] : [])
     ],
     1,
     "IF_STATEMENT",
     "CODE_EXECUTION"
 );
 
-const elseStatement = () => line(
-    [{ type: "KEYWORD", value: "else" }],
+const createElseStatementLine = (): FormattedPascalLine => createFormattedLine(
+    [{ type: "KEYWORD" as TokenType, value: "else" }],
     1,
     "UNKNOWN",
     "CODE_EXECUTION"
 );
 
-export { line, program, varDecl, varDef, begin, end, writeln, ifStatement, elseStatement };
+export {
+    createFormattedLine,
+    createProgramLine,
+    createVarDeclarationLine,
+    createVarDefinitionLine,
+    createBeginLine,
+    createEndLine,
+    createWritelnLine,
+    createIfStatementLine,
+    createElseStatementLine,
+    type PascalToken,
+    type TokenType
+};
